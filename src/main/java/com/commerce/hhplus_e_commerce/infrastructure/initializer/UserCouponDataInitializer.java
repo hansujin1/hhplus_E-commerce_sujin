@@ -1,6 +1,7 @@
 package com.commerce.hhplus_e_commerce.infrastructure.initializer;
 
 import com.commerce.hhplus_e_commerce.domain.UserCoupon;
+import com.commerce.hhplus_e_commerce.domain.enums.UserCouponStatus;
 import com.commerce.hhplus_e_commerce.repository.UserCouponRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
@@ -34,8 +35,8 @@ public class UserCouponDataInitializer {
         cal.set(2025, Calendar.NOVEMBER, 16);
         Date expire2 = cal.getTime();
 
-        userCouponRepository.save(new UserCoupon(1L,1L,20250202L,"ACTIVE",issuedDate,null,expire1));
-        userCouponRepository.save(new UserCoupon(2L,2L,20250202L,"USED",issuedDate,new Date(),expire2));
+        userCouponRepository.save(new UserCoupon(1L,1L,20250202L, UserCouponStatus.ACTIVE,issuedDate,null,expire1));
+        userCouponRepository.save(new UserCoupon(2L,2L,20250202L,UserCouponStatus.USED,issuedDate,new Date(),expire2));
     }
 
 

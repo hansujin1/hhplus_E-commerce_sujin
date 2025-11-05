@@ -1,5 +1,6 @@
 package com.commerce.hhplus_e_commerce.domain;
 
+import com.commerce.hhplus_e_commerce.domain.enums.CouponStatus;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,11 +18,11 @@ public class Coupon {
     private Date start_date;
     private Date end_date;
     private int valid_days; //사용가능 일자
-    private String status;
+    private CouponStatus status;
 
     public Coupon() {}
 
-    public Coupon(Long coupon_id,String coupon_name,double discount_rate,String discount_type,int total_quantity, int issued_amount, Date start_date, Date end_date, int valid_days, String status){
+    public Coupon(Long coupon_id,String coupon_name,double discount_rate,String discount_type,int total_quantity, int issued_amount, Date start_date, Date end_date, int valid_days, CouponStatus status){
         this.coupon_id = coupon_id;
         this.coupon_name = coupon_name;
         this.discount_rate = discount_rate;

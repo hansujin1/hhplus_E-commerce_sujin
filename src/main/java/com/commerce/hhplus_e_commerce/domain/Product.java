@@ -1,5 +1,6 @@
 package com.commerce.hhplus_e_commerce.domain;
 
+import com.commerce.hhplus_e_commerce.domain.enums.ProductStatus;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,13 +13,13 @@ public class Product {
     private String product_name;
     private int stock;
     private int price;
-    private String status;
+    private ProductStatus status;
     private int popularity_score;
     private Date created_at;
 
     public Product() {}
 
-    public  Product(Long product_id, String product_name, int stock, int price, String status, int popularity_score, Date created_at) {
+    public  Product(Long product_id, String product_name, int stock, int price, ProductStatus status, int popularity_score, Date created_at) {
         this.product_id = product_id;
         this.product_name = product_name;
         this.stock = stock;
