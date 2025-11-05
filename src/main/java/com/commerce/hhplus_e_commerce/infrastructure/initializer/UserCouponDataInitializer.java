@@ -34,8 +34,8 @@ public class UserCouponDataInitializer {
         cal.set(2025, Calendar.NOVEMBER, 16);
         Date expire2 = cal.getTime();
 
-        userCouponRepository.save(new UserCoupon(null,1L,20250202L,"ACTIVE",issuedDate,null,expire1));
-        userCouponRepository.save(new UserCoupon(null,2L,20250202L,"USED",issuedDate,new Date(),expire2));
+        userCouponRepository.save(new UserCoupon(1L,1L,20250202L,"ACTIVE",issuedDate,null,expire1));
+        userCouponRepository.save(new UserCoupon(2L,2L,20250202L,"USED",issuedDate,new Date(),expire2));
     }
 
 

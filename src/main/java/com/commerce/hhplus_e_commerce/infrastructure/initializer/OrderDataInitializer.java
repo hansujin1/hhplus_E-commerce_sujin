@@ -23,9 +23,9 @@ public class OrderDataInitializer {
     public void init(){
         log.info("order 정보 초기 셋팅하기");
         //1L,2L
-        orderRepository.save(new Order(1L,20250202L,80_000,0,80_000,0,new Date(),new  Date()));
+        orderRepository.save(new Order(1L,20250202L,80_000,0,80_000,0,new Date(),new  Date(),null));
         //3L,5L,6L --> 15% 세일
-        orderRepository.save(new Order(2L,20250202L,85_000,12_750,72_250,0,new Date(),new  Date()));
+        orderRepository.save(new Order(2L,20250202L,85_000,12_750,72_250,0,new Date(),new  Date(),2L));
     }
 
 

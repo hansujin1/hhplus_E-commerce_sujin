@@ -16,11 +16,12 @@ public class Order {
     private int cancelled_price;
     private Date created_dt;
     private Date paid_dt;
+    private Long userCouponId;
 
 
     public Order() {}
 
-    public Order(Long order_id, Long user_id, int total_price, int discount_price, int final_price, int cancelled_amount, Date created_dt, Date paid_dt) {
+    public Order(Long order_id, Long user_id, int total_price, int discount_price, int final_price, int cancelled_amount, Date created_dt, Date paid_dt,Long userCouponId) {
         this.order_id = order_id;
         this.user_id = user_id;
         this.total_price = total_price;
@@ -29,6 +30,7 @@ public class Order {
         this.cancelled_price = cancelled_amount;
         this.created_dt = created_dt;
         this.paid_dt = paid_dt;
+        this.userCouponId = userCouponId;
     }
 
 }
