@@ -14,14 +14,6 @@ import java.util.List;
 @Component
 public class CreateOrderUseCase {
 
-    /*
-    1.상품 상태확인 및 재고 확인하기
-    2.쿠폰유효성 check하기
-    3.할인금액 계산하기
-    4. 포인트 사용가는 여부 판단
-    5. 주문생성 및 저장
-     */
-
     private final ProductService productService;
     private final CouponService couponService;
     private final OrderService orderService;
@@ -45,12 +37,15 @@ public class CreateOrderUseCase {
             discountPrice = couponService.getDiscountAmount(req.couponId(), totalPrice);
         }
 
+        productService.minusStock(products, req.items());
+
         Order order = orderService.createOrder(
                 req.userId(),
                 totalPrice,
                 discountPrice,
                 req.couponId()
         );
+        
 
 
        return OrderCreateResponse.from(order, products, req.items());

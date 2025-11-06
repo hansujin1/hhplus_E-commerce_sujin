@@ -8,7 +8,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -66,4 +69,41 @@ public class ProductService {
     }
 
 
+    public void minusStock(List<Product> products, @NotEmpty List<OrderCreateRequest.Item> items) {
+        if (items == null || items.isEmpty()) {
+            throw new IllegalArgumentException("차감할 상품이 없습니다.");
+        }
+
+        Map<Long, Integer> qtyByProduct = new HashMap<>();
+        for (OrderCreateRequest.Item it : items) {
+            if (it.productId() == null || it.quantity() <= 0) {
+                throw new IllegalArgumentException("상품ID 또는 수량이 올바르지 않습니다.");
+            }
+            qtyByProduct.merge(it.productId(), it.quantity(), Integer::sum);
+        }
+
+        Map<Long, Product> productMap = products.stream()
+                .collect(Collectors.toMap(Product::getProduct_id, p -> p));
+
+        // 차감 수행 + 저장
+        for (Map.Entry<Long, Integer> e : qtyByProduct.entrySet()) {
+            Long productId = e.getKey();
+            int need = e.getValue();
+
+            Product p = productMap.get(productId);
+            if (p == null) {
+                // 방어: 전달된 products에 없으면 저장소에서 조회 (in-memory/DB 모두 대응)
+                p = productRepository.selectByProductId(productId);
+                if (p == null) {
+                    throw new IllegalStateException("상품을 찾을 수 없습니다: " + productId);
+                }
+                productMap.put(productId, p);
+            }
+
+            // 도메인 규칙으로 차감 (0되면 SOLD_OUT 처리)
+            p.decreaseStock(need);
+
+            // in-memory에선 Map 갱신, DB 전환 시엔 UPDATE 의미
+            productRepository.save(p);
+    }
 }
