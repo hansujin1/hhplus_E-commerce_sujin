@@ -1,5 +1,6 @@
 package com.commerce.hhplus_e_commerce.service;
 
+import com.commerce.hhplus_e_commerce.domain.OrderItems;
 import com.commerce.hhplus_e_commerce.domain.Product;
 import com.commerce.hhplus_e_commerce.dto.OrderCreateRequest;
 import com.commerce.hhplus_e_commerce.repository.ProductRepository;
@@ -100,6 +101,27 @@ public class ProductService {
 
             // DB 전환 시엔 UPDATE 의
             productRepository.save(p);
+        }
+    }
+
+    public void restoreStockByOrderItems(List<OrderItems> orderItems) {
+        if (orderItems == null || orderItems.isEmpty()) return;
+
+        // 동일 상품 여러 개 합쳐서 복원 (안하면 중복 복원됨)
+        Map<Long, Integer> qtyByProduct = new HashMap<>();
+        for (OrderItems item : orderItems) {
+            qtyByProduct.merge(item.getProduct_id(), item.getQuantity(), Integer::sum);
+        }
+
+        for (Map.Entry<Long, Integer> entry : qtyByProduct.entrySet()) {
+            Long productId = entry.getKey();
+            int qty = entry.getValue();
+
+            Product product = productRepository.selectByProductId(productId);
+            if (product == null) continue;
+
+            product.restoreStock(qty);
+            productRepository.save(product);
         }
     }
 }

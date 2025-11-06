@@ -1,19 +1,28 @@
 package com.commerce.hhplus_e_commerce.useCase;
 
+import com.commerce.hhplus_e_commerce.domain.Order;
 import com.commerce.hhplus_e_commerce.dto.PaymentRequest;
 import com.commerce.hhplus_e_commerce.dto.PaymentResponse;
+import com.commerce.hhplus_e_commerce.service.PaymentService;
 
 public class PaymentUseCase {
+    private final PaymentService paymentService;
 
-    /*
-    1. 주문 롹인하기
-    2. 결제 처리
-    3. 결제 성공 시, 주문상태변경하기
-    ---
-    결제 실패 시, 주문 실패 및 재고 원복시키기
-     */
+    public PaymentUseCase(PaymentService paymentService) {
+        this.paymentService = paymentService;
+    }
 
-    public PaymentResponse payOrder(String orderId, PaymentRequest req) {
+    public PaymentResponse payOrder(Long orderId, PaymentRequest req) {
+
+        try {
+            Order order = paymentService.processPayment(orderId, req.userId());
+            return PaymentResponse.success(order.getOrder_id(), order.getFinal_price());
+
+        } catch (Exception e) {
+            // 실패 → 보상 (재고/쿠폰 원복)
+            paymentService.rollbackPayment(orderId, req.userId());
+            return PaymentResponse.fail(orderId, e.getMessage());
+        }
 
     }
 }

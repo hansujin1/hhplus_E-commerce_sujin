@@ -24,10 +24,10 @@ public class InMemoryUserRepository implements UserRepository{
     }
 
     @Override
-    public Optional<User> findByUserId(User user) {
-        if(user.getUser_id() == null){
+    public Optional<User> findByUserId(Long userId) {
+        if(userId == null){
             throw new IllegalArgumentException("ID가 넘어오지 않음");
         }
-        return Optional.ofNullable(userMap.get(user.getUser_id()));
+        return Optional.ofNullable(userMap.get(userId));
     }
 }

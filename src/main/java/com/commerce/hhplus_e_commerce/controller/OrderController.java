@@ -33,7 +33,7 @@ public class OrderController {
 
     @Operation(summary = "결제 처리(포인트 + 쿠폰)", description = "쿠폰 유효성 확인 → 할인 → 포인트 차감 → 주문 PAID")
     @PostMapping(value = "/{orderId}/payment", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PaymentResponse> pay(@PathVariable String orderId, @Valid @RequestBody PaymentRequest req) {
+    public ResponseEntity<PaymentResponse> pay(@PathVariable Long orderId, @Valid @RequestBody PaymentRequest req) {
 
         return ResponseEntity.ok(paymentUseCase.payOrder(orderId, req));
 

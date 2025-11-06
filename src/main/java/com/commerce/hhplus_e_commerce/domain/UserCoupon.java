@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
 
 @Getter
 @Setter
@@ -19,7 +17,6 @@ public class UserCoupon {
     private LocalDate used_date;
     private LocalDate expires_date;
 
-    public UserCoupon() {}
 
    public UserCoupon(Long user_coupon_id,Long coupon_id,Long user_id,UserCouponStatus status,LocalDate issued_date,
                      LocalDate used_date,LocalDate expires_date) {
@@ -50,6 +47,10 @@ public class UserCoupon {
 
     public void expire() {
         this.status = UserCouponStatus.EXPIRED;
+    }
+
+    public void activate() {
+        this.status = UserCouponStatus.ACTIVE;
     }
 
 }

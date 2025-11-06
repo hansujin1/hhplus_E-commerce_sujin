@@ -7,7 +7,6 @@ import com.commerce.hhplus_e_commerce.repository.UserCouponRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -39,5 +38,23 @@ public class CouponService {
                 .orElseThrow(() -> new IllegalStateException("쿠폰 정책을 찾을 수 없습니다: " + couponId));
 
         return coupon.calculateDiscount(totalPrice);
+    }
+
+    public void consumeOnPayment(Long userId, Long couponId) {
+        UserCoupon userCoupon = userCouponRepository.findUserCoupon(userId, couponId)
+                .orElseThrow(() -> new IllegalStateException("쿠폰을 찾을 수 없습니다: " + couponId));
+
+        userCoupon.use(); // 도메인 메서드 → 상태 ACTIVE → USED 변경
+        userCouponRepository.save(userCoupon);
+    }
+
+    public void restoreCouponStatus(Long userId, Long couponId) {
+        UserCoupon userCoupon = userCouponRepository.findUserCoupon(userId, couponId)
+                .orElseThrow(() -> new IllegalStateException("쿠폰을 찾을 수 없습니다: " + couponId));
+
+        if (userCoupon.getStatus().name().equals("USED")) {
+            userCoupon.activate();
+            userCouponRepository.save(userCoupon);
+        }
     }
 }

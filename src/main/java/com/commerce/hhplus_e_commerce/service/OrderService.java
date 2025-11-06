@@ -3,12 +3,13 @@ package com.commerce.hhplus_e_commerce.service;
 import com.commerce.hhplus_e_commerce.domain.Order;
 import com.commerce.hhplus_e_commerce.repository.OrderRepository;
 import jakarta.validation.constraints.NotBlank;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class OrderService {
 
     private OrderRepository orderRepository;

@@ -6,6 +6,7 @@ public enum OrderItemStatus {
     SHIPPED, //배달중
     DELIVERED, //배달완료
     CANCELED,
-    RETURNED;
+    RETURNED,
+    FAILED;
 
 }

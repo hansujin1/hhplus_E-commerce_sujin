@@ -18,9 +18,6 @@ public class Order {
     private Date paid_dt;
     private Long userCouponId;
 
-
-    public Order() {}
-
     public Order(Long order_id, Long user_id, int total_price, int discount_price, int final_price,
                  int cancelled_amount, Date created_dt, Date paid_dt,Long userCouponId) {
         this.order_id = order_id;
@@ -33,5 +30,19 @@ public class Order {
         this.paid_dt = paid_dt;
         this.userCouponId = userCouponId;
     }
+    /** 결제 가능한 상태인지 확인 */
+    public boolean canPay() {
+        return this.paid_dt == null; // “아직 결제가 안 된 경우”에만 결제 가능
+    }
 
+    public void completePayment() {
+        if (!canPay()) {
+            throw new IllegalStateException("이미 결제된 주문입니다.");
+        }
+        this.paid_dt = new Date(); // 결제 시각 기록
+    }
+
+    public void cancelPayment() {
+        this.paid_dt = null; // 결제 기록 제거
+    }
 }
