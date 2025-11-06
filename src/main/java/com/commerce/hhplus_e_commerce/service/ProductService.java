@@ -27,18 +27,15 @@ public class ProductService {
 
         for (OrderCreateRequest.Item item : items) {
 
-            // 1) 상품 조회
             Product product = productRepository.selectByProductId(item.productId());
             if (product == null) {
                 throw new IllegalStateException("상품을 찾을 수 없습니다: " + item.productId());
             }
 
-            // 2) 판매 가능 상태 여부 확인
             if (!product.isAvailable()) {
                 throw new IllegalStateException("현재 판매할 수 없는 상품입니다: " + product.getProduct_name());
             }
 
-            // 3) 재고 확인
             if (product.getStock() < item.quantity()) {
                 throw new IllegalStateException(
                         "재고 부족: " + product.getProduct_name() +
@@ -85,7 +82,6 @@ public class ProductService {
         Map<Long, Product> productMap = products.stream()
                 .collect(Collectors.toMap(Product::getProduct_id, p -> p));
 
-        // 차감 수행 + 저장
         for (Map.Entry<Long, Integer> e : qtyByProduct.entrySet()) {
             Long productId = e.getKey();
             int need = e.getValue();
@@ -100,10 +96,10 @@ public class ProductService {
                 productMap.put(productId, p);
             }
 
-            // 도메인 규칙으로 차감 (0되면 SOLD_OUT 처리)
             p.decreaseStock(need);
 
-            // in-memory에선 Map 갱신, DB 전환 시엔 UPDATE 의미
+            // DB 전환 시엔 UPDATE 의
             productRepository.save(p);
+        }
     }
 }
