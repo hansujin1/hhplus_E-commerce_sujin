@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-@Setter
 public class OrderItems {
     private Long order_item_id;
     private Long order_id;
@@ -17,7 +16,8 @@ public class OrderItems {
 
     public OrderItems() {}
 
-    public OrderItems(Long order_item_id,Long order_id,Long product_id, String product_name, int product_price, OrderItemStatus status, int quantity) {
+    public OrderItems(Long order_item_id,Long order_id,Long product_id, String product_name,
+                      int product_price, OrderItemStatus status, int quantity) {
         this.order_item_id = order_item_id;
         this.order_id = order_id;
         this.product_id = product_id;

@@ -7,7 +7,6 @@ import lombok.Setter;
 import java.util.Date;
 
 @Getter
-@Setter
 public class Product {
     private Long product_id;
     private String product_name;
@@ -19,7 +18,8 @@ public class Product {
 
     public Product() {}
 
-    public  Product(Long product_id, String product_name, int stock, int price, ProductStatus status, int popularity_score, Date created_at) {
+    public  Product(Long product_id, String product_name, int stock, int price, ProductStatus status,
+                    int popularity_score, Date created_at) {
         this.product_id = product_id;
         this.product_name = product_name;
         this.stock = stock;

@@ -7,7 +7,6 @@ import lombok.Setter;
 import java.util.Date;
 
 @Getter
-@Setter
 public class UserCoupon {
     private Long user_coupon_id;
     private Long coupon_id;
@@ -19,7 +18,8 @@ public class UserCoupon {
 
     public UserCoupon() {}
 
-   public UserCoupon(Long user_coupon_id,Long coupon_id,Long user_id,UserCouponStatus status,Date issued_date,Date used_date,Date expires_date) {
+   public UserCoupon(Long user_coupon_id,Long coupon_id,Long user_id,UserCouponStatus status,Date issued_date,
+                     Date used_date,Date expires_date) {
         this.user_coupon_id = user_coupon_id;
         this.coupon_id = coupon_id;
         this.user_id = user_id;

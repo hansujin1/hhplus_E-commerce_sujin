@@ -6,7 +6,6 @@ import lombok.Setter;
 import java.util.Date;
 
 @Getter
-@Setter
 public class User {
     private Long user_id;
     private String user_name;

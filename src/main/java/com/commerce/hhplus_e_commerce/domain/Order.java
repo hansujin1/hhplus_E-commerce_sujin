@@ -6,7 +6,6 @@ import lombok.Setter;
 import java.util.Date;
 
 @Getter
-@Setter
 public class Order {
     private Long order_id;
     private Long user_id;
@@ -21,7 +20,8 @@ public class Order {
 
     public Order() {}
 
-    public Order(Long order_id, Long user_id, int total_price, int discount_price, int final_price, int cancelled_amount, Date created_dt, Date paid_dt,Long userCouponId) {
+    public Order(Long order_id, Long user_id, int total_price, int discount_price, int final_price,
+                 int cancelled_amount, Date created_dt, Date paid_dt,Long userCouponId) {
         this.order_id = order_id;
         this.user_id = user_id;
         this.total_price = total_price;

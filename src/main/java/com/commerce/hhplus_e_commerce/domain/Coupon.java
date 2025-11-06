@@ -7,7 +7,6 @@ import lombok.Setter;
 import java.util.Date;
 
 @Getter
-@Setter
 public class Coupon {
     private Long coupon_id;
     private String coupon_name;
@@ -22,7 +21,8 @@ public class Coupon {
 
     public Coupon() {}
 
-    public Coupon(Long coupon_id,String coupon_name,double discount_rate,String discount_type,int total_quantity, int issued_amount, Date start_date, Date end_date, int valid_days, CouponStatus status){
+    public Coupon(Long coupon_id,String coupon_name,double discount_rate,String discount_type,int total_quantity,
+                  int issued_amount, Date start_date, Date end_date, int valid_days, CouponStatus status){
         this.coupon_id = coupon_id;
         this.coupon_name = coupon_name;
         this.discount_rate = discount_rate;
