@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
+@Setter
 public class UserCoupon {
     private Long user_coupon_id;
     private Long coupon_id;

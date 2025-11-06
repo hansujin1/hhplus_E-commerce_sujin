@@ -7,6 +7,7 @@ import lombok.Setter;
 import java.util.Date;
 
 @Getter
+@Setter
 public class PointHis {
     private Long point_hisId;
     private Long user_id;

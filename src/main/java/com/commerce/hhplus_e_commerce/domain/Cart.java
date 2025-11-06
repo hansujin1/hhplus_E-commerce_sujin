@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter
+@Setter
 public class Cart {
     private Long cart_id;
     private Long user_id;

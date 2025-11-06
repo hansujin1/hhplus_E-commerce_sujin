@@ -7,6 +7,7 @@ import lombok.Setter;
 import java.util.Date;
 
 @Getter
+@Setter
 public class Coupon {
     private Long coupon_id;
     private String coupon_name;
@@ -57,7 +58,7 @@ public class Coupon {
         this.issued_amount++;
     }
 
-   /** 할인가 계산 */ 
+   /** 할인가 계산 */
     public int calculateDiscount(int totalPrice) {
         if ("RATE".equalsIgnoreCase(discount_type)) {
             return (int) Math.floor(totalPrice * discount_rate);

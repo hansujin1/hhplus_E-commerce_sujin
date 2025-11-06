@@ -6,6 +6,7 @@ import lombok.Setter;
 import java.util.Date;
 
 @Getter
+@Setter
 public class Order {
     private Long order_id;
     private Long user_id;

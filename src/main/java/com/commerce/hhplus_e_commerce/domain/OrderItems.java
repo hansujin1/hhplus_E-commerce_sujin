@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter
+@Setter
 public class OrderItems {
     private Long order_item_id;
     private Long order_id;

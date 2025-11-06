@@ -7,6 +7,7 @@ import lombok.Setter;
 import java.util.Date;
 
 @Getter
+@Setter
 public class Product {
     private Long product_id;
     private String product_name;
