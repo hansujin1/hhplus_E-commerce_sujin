@@ -7,6 +7,8 @@ import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -26,17 +28,12 @@ public class UserCouponDataInitializer {
 
         Calendar cal = Calendar.getInstance();
 
-        cal.set(2025, Calendar.NOVEMBER, 1);
-        Date issuedDate = cal.getTime();
-
-        cal.set(2025, Calendar.NOVEMBER, 30);
-        Date expire1 = cal.getTime();
-
-        cal.set(2025, Calendar.NOVEMBER, 16);
-        Date expire2 = cal.getTime();
+        LocalDate issuedDate = LocalDate.of(2025, 11, 1);
+        LocalDate expire1    = LocalDate.of(2025, 11, 30);
+        LocalDate expire2    = LocalDate.of(2025, 11, 16);
 
         userCouponRepository.save(new UserCoupon(1L,1L,20250202L, UserCouponStatus.ACTIVE,issuedDate,null,expire1));
-        userCouponRepository.save(new UserCoupon(2L,2L,20250202L,UserCouponStatus.USED,issuedDate,new Date(),expire2));
+        userCouponRepository.save(new UserCoupon(2L,2L,20250202L,UserCouponStatus.USED,issuedDate, LocalDate.now(),expire2));
     }
 
 

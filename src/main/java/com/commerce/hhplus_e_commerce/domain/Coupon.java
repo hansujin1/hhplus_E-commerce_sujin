@@ -35,4 +35,37 @@ public class Coupon {
         this.status = status;
     }
 
+    /** 발급 가능 기간인지 검증 */
+    public boolean isWithinPeriod() {
+        Date now = new Date();
+        return (start_date == null || !now.before(start_date)) &&
+                (end_date == null || !now.after(end_date));
+    }
+
+    /** 발급 가능 여부 확인 */
+    public boolean canIssue() {
+        return status == CouponStatus.ISSUING &&
+                issued_amount < total_quantity &&
+                isWithinPeriod();
+    }
+
+    /** 발급 시 수량 증가 */
+    public void issue() {
+        if (!canIssue()) {
+            throw new IllegalStateException("쿠폰을 더 이상 발급할 수 없습니다.");
+        }
+        this.issued_amount++;
+    }
+
+   /** 할인가 계산 */ 
+    public int calculateDiscount(int totalPrice) {
+        if ("RATE".equalsIgnoreCase(discount_type)) {
+            return (int) Math.floor(totalPrice * discount_rate);
+        }
+        if ("FIXED".equalsIgnoreCase(discount_type)) {
+            return (int) discount_rate;
+        }
+        throw new IllegalStateException("지원하지 않는 할인 타입: " + discount_type);
+    }
+
 }

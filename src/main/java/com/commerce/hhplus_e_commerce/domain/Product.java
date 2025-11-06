@@ -29,4 +29,31 @@ public class Product {
         this.created_at = created_at;
     }
 
+
+    /** 재고 감소*/
+    public void decreaseStock(int quantity) {
+        if (this.stock < quantity) {
+            throw new IllegalStateException("재고가 부족합니다.");
+        }
+        this.stock -= quantity;
+        if (this.stock == 0) {
+            this.status = ProductStatus.SOLD_OUT;
+        }
+    }
+
+    /** 판매 가능 여부 확인 */
+    public boolean isAvailable() {
+        return this.status == ProductStatus.SALE && this.stock > 0;
+    }
+
+    /**상품 가격 계산 */
+    public int calculatePrice(int quantity) {
+        return this.price * quantity;
+    }
+
+    /** 재고 복원 */
+    public void restoreStock(int quantity) {
+        stock += quantity;
+    }
+
 }
