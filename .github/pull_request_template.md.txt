@@ -38,8 +38,9 @@
 
 ### 질문/고민 포인트
 1. In-Memory 형식을 이런 식으로 구현하면 되는 건지. 다른 방식으로 했었던 거였을까요...?
-2.
-
+2. controllerTest 하는 부분에서 @MockBean을 주입시켰는 데 사용할 수 있으나
+warning: [removal] MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+이런 에러가 나는 데 뭘 잘못 만들었을까요?
 ### 특별히 리뷰받고 싶은 부분
 -
 

@@ -1,6 +1,7 @@
 package com.commerce.hhplus_e_commerce.repository;
 
 import com.commerce.hhplus_e_commerce.domain.UserCoupon;
+import com.commerce.hhplus_e_commerce.domain.enums.UserCouponStatus;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
@@ -51,11 +52,11 @@ public class InMemoryUserCouponRepository implements UserCouponRepository{
         UserCoupon coupon = findUserCoupon(coupon_id, user_id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 유저에게 쿠폰이 존재하지 않습니다."));
 
-        if ("USED".equalsIgnoreCase(coupon.getStatus())) {
+        if (UserCouponStatus.USED.equals(coupon.getStatus())) {
             throw new IllegalStateException("이미 사용된 쿠폰입니다.");
         }
 
-        coupon.setStatus("USED");
+        coupon.setStatus(UserCouponStatus.USED);
         userCouponMap.put(coupon.getUser_coupon_id(), coupon);
     }
 
@@ -63,6 +64,6 @@ public class InMemoryUserCouponRepository implements UserCouponRepository{
     public void couponStatusUsed(Long coupon_id, Long user_id) {
         UserCoupon coupon = findUserCoupon(coupon_id, user_id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 유저에게 쿠폰이 존재하지 않습니다."));
-        coupon.setStatus("Used");
+        coupon.setStatus(UserCouponStatus.USED);
     }
 }
