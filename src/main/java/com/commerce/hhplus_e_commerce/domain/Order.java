@@ -3,7 +3,7 @@ package com.commerce.hhplus_e_commerce.domain;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -14,12 +14,12 @@ public class Order {
     private int discount_price;
     private int final_price;
     private int cancelled_price;
-    private Date created_dt;
-    private Date paid_dt;
+    private LocalDate created_dt;
+    private LocalDate paid_dt;
     private Long userCouponId;
 
     public Order(Long order_id, Long user_id, int total_price, int discount_price, int final_price,
-                 int cancelled_amount, Date created_dt, Date paid_dt,Long userCouponId) {
+                 int cancelled_amount, LocalDate created_dt, LocalDate paid_dt,Long userCouponId) {
         this.order_id = order_id;
         this.user_id = user_id;
         this.total_price = total_price;
@@ -39,7 +39,7 @@ public class Order {
         if (!canPay()) {
             throw new IllegalStateException("이미 결제된 주문입니다.");
         }
-        this.paid_dt = new Date(); // 결제 시각 기록
+        this.paid_dt = LocalDate.now(); // 결제 시각 기록
     }
 
     public void cancelPayment() {
