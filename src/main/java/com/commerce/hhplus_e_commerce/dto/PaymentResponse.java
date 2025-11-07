@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @Schema(description = "결제 응답")
 public record PaymentResponse(
         @Schema(description="주문 ID", example="O-1719999999999") Long orderId,
-        @Schema(description="결제 금액(차감된 포인트)", example="910000") int paidAmount,
+        @Schema(description="결제 금액", example="910000") int paidAmount,
         @Schema(description="상태", example="SUCCESS") OrderItemStatus status,
         @Schema(description="외부 전송(목킹)", example="QUEUED") String dataTransmission
 ){
