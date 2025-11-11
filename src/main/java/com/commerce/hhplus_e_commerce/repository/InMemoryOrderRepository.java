@@ -19,7 +19,7 @@ public class InMemoryOrderRepository implements OrderRepository{
     @Override
     public Order save(Order order) {
         if(order.getOrder_id() == null){
-            order.setOrder_id(idGenerator.getAndIncrement());
+            order.orderId(idGenerator.getAndIncrement());
         } else if (orderMap.containsKey(order.getOrder_id())) {
             throw new IllegalArgumentException("Order already exists with ID: " + order.getOrder_id());
         }

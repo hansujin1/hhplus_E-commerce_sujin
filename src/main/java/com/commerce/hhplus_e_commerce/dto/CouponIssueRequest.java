@@ -6,8 +6,4 @@ import io.swagger.v3.oas.annotations.media.Schema;
 public record CouponIssueRequest(
         @Schema(description="사용자 ID", example="sujin") Long userId
 ) {
-
-    public Object getUserId() {
-        return userId;
-    }
 }

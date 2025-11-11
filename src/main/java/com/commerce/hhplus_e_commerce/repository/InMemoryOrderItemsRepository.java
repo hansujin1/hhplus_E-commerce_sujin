@@ -19,7 +19,7 @@ public class InMemoryOrderItemsRepository implements OrderItemsRepository{
     @Override
     public OrderItems save(OrderItems orderItems) {
         if(orderItems.getOrder_item_id() == null){
-            orderItems.setOrder_item_id(idGenerator.getAndIncrement());
+            orderItems.orderItemId(idGenerator.getAndIncrement());
         }
 
         orderItemsMap.put(orderItems.getOrder_item_id(), orderItems);

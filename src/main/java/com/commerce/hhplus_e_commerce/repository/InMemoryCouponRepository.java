@@ -16,7 +16,7 @@ public class InMemoryCouponRepository implements CouponRepository{
     @Override
     public Coupon save(Coupon coupon) {
         if(coupon.getCoupon_id() == null){
-            coupon.setCoupon_id(idGenerator.incrementAndGet());
+            coupon.couponId(idGenerator.incrementAndGet());
         }
 
         couponMap.put(coupon.getCoupon_id(), coupon);
@@ -50,7 +50,7 @@ public class InMemoryCouponRepository implements CouponRepository{
             throw new IllegalStateException("Coupon is sold out.");
         }
 
-        coupon.setIssued_amount(coupon.getIssued_amount() + 1);
+        coupon.issue();
     }
 
     // 사용 가능 여부 확인

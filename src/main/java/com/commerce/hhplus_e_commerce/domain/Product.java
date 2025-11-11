@@ -2,22 +2,22 @@ package com.commerce.hhplus_e_commerce.domain;
 
 import com.commerce.hhplus_e_commerce.domain.enums.ProductStatus;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.Date;
 
 @Getter
-@Setter
 public class Product {
     private Long product_id;
-    private String product_name;
+    private final String product_name;
     private int stock;
-    private int price;
+    private final int price;
     private ProductStatus status;
-    private int popularity_score;
-    private Date created_at;
+    private final int popularity_score;
+    private final Date created_at;
 
-    public Product() {}
+    public void productId(Long product_id) {
+        this.product_id = product_id;
+    }
 
     public  Product(Long product_id, String product_name, int stock, int price, ProductStatus status,
                     int popularity_score, Date created_at) {

@@ -48,18 +48,13 @@ public class PaymentService {
 
         int amount = order.getFinal_price();
 
-        // 포인트 차감 (여기서 실패 가능)
-        if (user.getPoint() < amount) {
-            throw new IllegalStateException("포인트 잔액이 부족합니다.");
-        }
-        user.setPoint(user.getPoint() - amount);
+        user.payPoint(amount);
         userRepository.save(user);
 
         if (order.getUserCouponId() != null) {
             couponService.consumeOnPayment(userId, order.getUserCouponId());
         }
 
-        // 결제 완료 처리
         order.completePayment();
         return orderRepository.save(order);
     }

@@ -19,7 +19,7 @@ public class InMemoryCartRepository implements CartRepository{
     @Override
     public Cart save(Cart cart) {
         if(cart.getCart_id()==null){
-            cart.setCart_id(idGenerator.getAndIncrement());
+            cart.cartId(idGenerator.getAndIncrement());
         }
         cartMap.put(cart.getCart_id(), cart);
 

@@ -18,7 +18,7 @@ public class InMemoryPointHisRepository implements PointHisRepository{
     @Override
     public PointHis save(PointHis pointHis) {
         if(pointHis.getPoint_hisId()==null){
-            pointHis.setPoint_hisId(idGenerator.getAndIncrement());
+            pointHis.pointHisId(idGenerator.getAndIncrement());
         }
 
         pointHisMap.put(pointHis.getPoint_hisId(),pointHis);

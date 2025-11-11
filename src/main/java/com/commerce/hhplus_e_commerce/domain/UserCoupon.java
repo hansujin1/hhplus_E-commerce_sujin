@@ -2,21 +2,22 @@ package com.commerce.hhplus_e_commerce.domain;
 
 import com.commerce.hhplus_e_commerce.domain.enums.UserCouponStatus;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDate;
 
 @Getter
-@Setter
 public class UserCoupon {
     private Long user_coupon_id;
-    private Long coupon_id;
-    private Long user_id;
+    private final Long coupon_id;
+    private final Long user_id;
     private UserCouponStatus status;
-    private LocalDate issued_date;
+    private final LocalDate issued_date;
     private LocalDate used_date;
-    private LocalDate expires_date;
+    private final LocalDate expires_date;
 
+    public void userCouponId(Long user_coupon_id) {
+        this.user_coupon_id = user_coupon_id;
+    }
 
    public UserCoupon(Long user_coupon_id,Long coupon_id,Long user_id,UserCouponStatus status,LocalDate issued_date,
                      LocalDate used_date,LocalDate expires_date) {

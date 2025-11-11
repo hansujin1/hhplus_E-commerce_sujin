@@ -1,22 +1,20 @@
 package com.commerce.hhplus_e_commerce.domain;
 
 import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDate;
 
 @Getter
-@Setter
 public class Order {
     private Long order_id;
-    private Long user_id;
-    private int total_price;
-    private int discount_price;
-    private int final_price;
-    private int cancelled_price;
-    private LocalDate created_dt;
+    private final Long user_id;
+    private final int total_price;
+    private final int discount_price;
+    private final int final_price;
+    private final int cancelled_price;
+    private final LocalDate created_dt;
     private LocalDate paid_dt;
-    private Long userCouponId;
+    private final Long userCouponId;
 
     public Order(Long order_id, Long user_id, int total_price, int discount_price, int final_price,
                  int cancelled_amount, LocalDate created_dt, LocalDate paid_dt,Long userCouponId) {
@@ -32,7 +30,7 @@ public class Order {
     }
     /** 결제 가능한 상태인지 확인 */
     public boolean canPay() {
-        return this.paid_dt == null; // “아직 결제가 안 된 경우”에만 결제 가능
+        return this.paid_dt == null;
     }
 
     public void completePayment() {
@@ -44,5 +42,9 @@ public class Order {
 
     public void cancelPayment() {
         this.paid_dt = null; // 결제 기록 제거
+    }
+
+    public void orderId(Long order_id) {
+        this.order_id = order_id;
     }
 }

@@ -2,20 +2,16 @@ package com.commerce.hhplus_e_commerce.domain;
 
 import com.commerce.hhplus_e_commerce.domain.enums.OrderItemStatus;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
 public class OrderItems {
     private Long order_item_id;
-    private Long order_id;
-    private Long product_id;
-    private String product_name;
-    private int product_price;
-    private OrderItemStatus status;
-    private int quantity;
-
-    public OrderItems() {}
+    private final Long order_id;
+    private final Long product_id;
+    private final String product_name;
+    private final int product_price;
+    private final OrderItemStatus status;
+    private final int quantity;
 
     public OrderItems(Long order_item_id,Long order_id,Long product_id, String product_name,
                       int product_price, OrderItemStatus status, int quantity) {
@@ -27,6 +23,10 @@ public class OrderItems {
         this.status = status;
         this.quantity = quantity;
 
+    }
+
+    public void orderItemId(Long order_item_id) {
+        this.order_item_id = order_item_id;
     }
 
 }

@@ -17,7 +17,7 @@ public class InMemoryUserCouponRepository implements UserCouponRepository{
     @Override
     public UserCoupon save(UserCoupon userCoupon) {
         if (userCoupon.getUser_coupon_id() == null) {
-            userCoupon.setUser_coupon_id(idGenerator.getAndIncrement());
+            userCoupon.userCouponId(idGenerator.getAndIncrement());
         }
 
         userCouponMap.put(userCoupon.getUser_coupon_id(), userCoupon);
@@ -56,7 +56,7 @@ public class InMemoryUserCouponRepository implements UserCouponRepository{
             throw new IllegalStateException("이미 사용된 쿠폰입니다.");
         }
 
-        coupon.setStatus(UserCouponStatus.USED);
+        coupon.use();
         userCouponMap.put(coupon.getUser_coupon_id(), coupon);
     }
 
@@ -64,6 +64,6 @@ public class InMemoryUserCouponRepository implements UserCouponRepository{
     public void couponStatusUsed(Long coupon_id, Long user_id) {
         UserCoupon coupon = findUserCoupon(coupon_id, user_id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 유저에게 쿠폰이 존재하지 않습니다."));
-        coupon.setStatus(UserCouponStatus.USED);
+        coupon.use();
     }
 }
