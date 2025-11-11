@@ -3,7 +3,7 @@ package com.commerce.hhplus_e_commerce.domain;
 import com.commerce.hhplus_e_commerce.domain.enums.ProductStatus;
 import lombok.Getter;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Getter
 public class Product {
@@ -13,14 +13,14 @@ public class Product {
     private final int price;
     private ProductStatus status;
     private final int popularity_score;
-    private final Date created_at;
+    private final LocalDate created_at;
 
     public void productId(Long product_id) {
         this.product_id = product_id;
     }
 
     public  Product(Long product_id, String product_name, int stock, int price, ProductStatus status,
-                    int popularity_score, Date created_at) {
+                    int popularity_score, LocalDate created_at) {
         this.product_id = product_id;
         this.product_name = product_name;
         this.stock = stock;
