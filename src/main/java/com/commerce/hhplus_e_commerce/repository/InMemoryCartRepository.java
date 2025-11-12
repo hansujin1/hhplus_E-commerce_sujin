@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.stream.Collectors;
 
 @Repository
 public class InMemoryCartRepository implements CartRepository{
@@ -30,7 +29,7 @@ public class InMemoryCartRepository implements CartRepository{
     public List<Cart> findAllCartItems(Long userId) {
         return cartMap.values().stream()
                       .filter(cart -> cart.getCartID().equals(userId))
-                      .collect(Collectors.toList());
+                      .toList();
     }
 
     @Override

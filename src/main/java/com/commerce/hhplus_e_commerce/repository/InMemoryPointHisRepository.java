@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.stream.Collectors;
 
 @Repository
 public class InMemoryPointHisRepository implements PointHisRepository{
@@ -34,6 +33,6 @@ public class InMemoryPointHisRepository implements PointHisRepository{
 
         return pointHisMap.values().stream()
                            .filter(p -> userId.equals(p.getUserId()))
-                           .collect(Collectors.toList());
+                           .toList();
     }
 }
