@@ -91,4 +91,37 @@ class ProductServiceTest {
 
     }
 
+    @Test
+    @DisplayName("전체 금액 계산하기")
+    void calculateTotalPrice(){
+        Product product1 = new Product(productId1
+                ,"상품1"
+                ,10
+                ,10_000
+                , ProductStatus.SALE
+                ,25
+                ,date1);
+
+        Product product2 = new Product(productId2
+                ,"상품2"
+                ,5
+                ,15_000
+                , ProductStatus.SALE
+                ,50
+                ,date2);
+
+        List<OrderCreateRequest.Item> items = List.of(
+                 new OrderCreateRequest.Item(productId1,2)
+                ,new OrderCreateRequest.Item(productId2,5)
+        );
+        List<Product> products = List.of(product1,product2);
+
+        int totalAmount = productService.calculateTotalPrice(products, items);
+
+        int expectedTotal = product1.getPrice() * items.get(0).quantity() +  product2.getPrice() * items.get(1).quantity();
+
+        assertThat(totalAmount).isEqualTo(expectedTotal);
+
+    }
+
 }
