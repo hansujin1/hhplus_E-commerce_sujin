@@ -18,34 +18,34 @@ public class InMemoryOrderItemsRepository implements OrderItemsRepository{
 
     @Override
     public OrderItems save(OrderItems orderItems) {
-        if(orderItems.getOrder_item_id() == null){
+        if(orderItems.getOrderItemId() == null){
             orderItems.orderItemId(idGenerator.getAndIncrement());
         }
 
-        orderItemsMap.put(orderItems.getOrder_item_id(), orderItems);
+        orderItemsMap.put(orderItems.getOrderItemId(), orderItems);
 
         return orderItems;
     }
 
     @Override
-    public List<OrderItems> findOrderItemsByOrderId(Long order_id) {
+    public List<OrderItems> findOrderItemsByOrderId(Long orderId) {
 
-        if (order_id == null) {
+        if (orderId == null) {
             throw new IllegalArgumentException("Order id can't be null");
         }
 
         return orderItemsMap.values().stream()
-                            .filter(item -> order_id.equals(item.getOrder_id()))
+                            .filter(item -> orderId.equals(item.getOrderId()))
                             .toList();
     }
 
     @Override
-    public Optional<OrderItems> findByOrderItemId(Long order_item_id) {
+    public Optional<OrderItems> findByOrderItemId(Long orderItemId) {
 
-        if(order_item_id == null) {
+        if(orderItemId == null) {
             throw new IllegalArgumentException("Order id can't be null");
         }
 
-        return Optional.ofNullable(orderItemsMap.get(order_item_id));
+        return Optional.ofNullable(orderItemsMap.get(orderItemId));
     }
 }

@@ -17,11 +17,11 @@ public class InMemoryPointHisRepository implements PointHisRepository{
 
     @Override
     public PointHis save(PointHis pointHis) {
-        if(pointHis.getPoint_hisId()==null){
+        if(pointHis.getPointHisId()==null){
             pointHis.pointHisId(idGenerator.getAndIncrement());
         }
 
-        pointHisMap.put(pointHis.getPoint_hisId(),pointHis);
+        pointHisMap.put(pointHis.getPointHisId(),pointHis);
 
         return pointHis;
     }
@@ -33,7 +33,7 @@ public class InMemoryPointHisRepository implements PointHisRepository{
         }
 
         return pointHisMap.values().stream()
-                           .filter(p -> userId.equals(p.getUser_id()))
+                           .filter(p -> userId.equals(p.getUserId()))
                            .collect(Collectors.toList());
     }
 }

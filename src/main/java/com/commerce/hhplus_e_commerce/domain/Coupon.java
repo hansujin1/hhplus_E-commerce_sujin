@@ -7,46 +7,46 @@ import java.util.Date;
 
 @Getter
 public class Coupon {
-    private Long coupon_id;
-    private final String coupon_name;
-    private final double discount_rate;
-    private final String discount_type;
-    private final int total_quantity;
-    private int issued_amount; // 발급수량
-    private final Date start_date;
-    private final Date end_date;
-    private final int valid_days; //사용가능 일자
+    private Long couponId;
+    private final String couponName;
+    private final double discountRate;
+    private final String discountType;
+    private final int totalQuantity;
+    private int issuedAmount; // 발급수량
+    private final Date startDate;
+    private final Date endDate;
+    private final int validDays; //사용가능 일자
     private final CouponStatus status;
 
-    public Coupon(Long coupon_id,String coupon_name,double discount_rate,String discount_type,int total_quantity,
-                  int issued_amount, Date start_date, Date end_date, int valid_days, CouponStatus status){
-        this.coupon_id = coupon_id;
-        this.coupon_name = coupon_name;
-        this.discount_rate = discount_rate;
-        this.discount_type = discount_type;
-        this.total_quantity = total_quantity;
-        this.issued_amount = issued_amount;
-        this.start_date = start_date;
-        this.end_date = end_date;
-        this.valid_days = valid_days;
+    public Coupon(Long couponId,String couponName,double discountRate,String discountType,int totalQuantity,
+                  int issuedAmount, Date startDate, Date endDate, int validDays, CouponStatus status){
+        this.couponId = couponId;
+        this.couponName = couponName;
+        this.discountRate = discountRate;
+        this.discountType = discountType;
+        this.totalQuantity = totalQuantity;
+        this.issuedAmount = issuedAmount;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.validDays = validDays;
         this.status = status;
     }
 
-    public void couponId(Long coupon_id){
-        this.coupon_id = coupon_id;
+    public void couponId(Long couponId){
+        this.couponId = couponId;
     }
 
     /** 발급 가능 기간인지 검증 */
     public boolean isWithinPeriod() {
         Date now = new Date();
-        return (start_date == null || !now.before(start_date)) &&
-                (end_date == null || !now.after(end_date));
+        return (startDate == null || !now.before(startDate)) &&
+                (endDate == null || !now.after(endDate));
     }
 
     /** 발급 가능 여부 확인 */
     public boolean canIssue() {
         return status == CouponStatus.ISSUING &&
-                issued_amount < total_quantity &&
+                issuedAmount < totalQuantity &&
                 isWithinPeriod();
     }
 
@@ -55,18 +55,18 @@ public class Coupon {
         if (!canIssue()) {
             throw new IllegalStateException("쿠폰을 더 이상 발급할 수 없습니다.");
         }
-        this.issued_amount++;
+        this.issuedAmount++;
     }
 
    /** 할인가 계산 */
     public int calculateDiscount(int totalPrice) {
-        if ("RATE".equalsIgnoreCase(discount_type)) {
-            return (int) Math.floor(totalPrice * discount_rate);
+        if ("RATE".equalsIgnoreCase(discountType)) {
+            return (int) Math.floor(totalPrice * discountRate);
         }
-        if ("FIXED".equalsIgnoreCase(discount_type)) {
-            return (int) discount_rate;
+        if ("FIXED".equalsIgnoreCase(discountType)) {
+            return (int) discountRate;
         }
-        throw new IllegalStateException("지원하지 않는 할인 타입: " + discount_type);
+        throw new IllegalStateException("지원하지 않는 할인 타입: " + discountType);
     }
 
 }

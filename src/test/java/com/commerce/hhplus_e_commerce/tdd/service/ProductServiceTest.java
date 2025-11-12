@@ -86,7 +86,7 @@ class ProductServiceTest {
 
         assertThatThrownBy(() -> productService.validateProducts(items))
                 .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining( "재고 부족: " + product1.getProduct_name() +
+                .hasMessageContaining( "재고 부족: " + product1.getProductName() +
                         " (요청: " + items.get(0).quantity() + ", 보유: " + product1.getStock() + ")");
 
     }

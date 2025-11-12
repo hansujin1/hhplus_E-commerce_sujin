@@ -16,11 +16,11 @@ public class InMemoryUserCouponRepository implements UserCouponRepository{
 
     @Override
     public UserCoupon save(UserCoupon userCoupon) {
-        if (userCoupon.getUser_coupon_id() == null) {
+        if (userCoupon.getUserCouponId() == null) {
             userCoupon.userCouponId(idGenerator.getAndIncrement());
         }
 
-        userCouponMap.put(userCoupon.getUser_coupon_id(), userCoupon);
+        userCouponMap.put(userCoupon.getUserCouponId(), userCoupon);
 
         return userCoupon;
     }
@@ -32,7 +32,7 @@ public class InMemoryUserCouponRepository implements UserCouponRepository{
         }
 
         return userCouponMap.values().stream()
-                .filter(c -> user_id.equals(c.getUser_id()))
+                .filter(c -> user_id.equals(c.getUserId()))
                 .toList();
     }
 
@@ -43,7 +43,7 @@ public class InMemoryUserCouponRepository implements UserCouponRepository{
         }
 
         return userCouponMap.values().stream()
-                .filter(c -> coupon_id.equals(c.getCoupon_id()) && user_id.equals(c.getUser_id()))
+                .filter(c -> coupon_id.equals(c.getCouponId()) && user_id.equals(c.getUserId()))
                 .findFirst();
     }
 
@@ -57,7 +57,7 @@ public class InMemoryUserCouponRepository implements UserCouponRepository{
         }
 
         coupon.use();
-        userCouponMap.put(coupon.getUser_coupon_id(), coupon);
+        userCouponMap.put(coupon.getUserCouponId(), coupon);
     }
 
     @Override

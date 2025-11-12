@@ -7,21 +7,21 @@ import java.util.Date;
 
 @Getter
 public class PointHis {
-    private Long point_hisId;
-    private final Long user_id;
+    private Long pointHisId;
+    private final Long userId;
     private final PointType type;
     private final int point;
-    private final Date created_dt;
+    private final Date createdDt;
 
-    public PointHis(Long point_hisId, Long user_id, PointType type, int point, Date created_dt) {
-        this.point_hisId = point_hisId;
-        this.user_id = user_id;
+    public PointHis(Long pointHisId, Long userId, PointType type, int point, Date createdDt) {
+        this.pointHisId = pointHisId;
+        this.userId = userId;
         this.type = type;
         this.point = point;
-        this.created_dt = created_dt;
+        this.createdDt = createdDt;
     }
 
     public void pointHisId(Long pointHisId) {
-        this.point_hisId = pointHisId;
+        this.pointHisId = pointHisId;
     }
 }

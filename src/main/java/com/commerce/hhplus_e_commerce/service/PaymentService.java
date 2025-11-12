@@ -35,7 +35,7 @@ public class PaymentService {
         Order order = orderRepository.findByOrderId(orderId)
                 .orElseThrow(() -> new IllegalStateException("주문을 찾을 수 없습니다."));
 
-        if (!order.getUser_id().equals(userId)) {
+        if (!order.getUserId().equals(userId)) {
             throw new IllegalStateException("본인의 주문만 결제할 수 있습니다.");
         }
         if (!order.canPay()) {
@@ -46,7 +46,7 @@ public class PaymentService {
         User user = userRepository.findByUserId(userId)
                 .orElseThrow(() -> new IllegalStateException("사용자를 찾을 수 없습니다."));
 
-        int amount = order.getFinal_price();
+        int amount = order.getFinalPrice();
 
         user.payPoint(amount);
         userRepository.save(user);

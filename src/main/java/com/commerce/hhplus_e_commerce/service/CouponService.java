@@ -91,7 +91,7 @@ public class CouponService {
                     UserCouponStatus.ACTIVE,
                     LocalDate.now(),
                     null,
-                    LocalDate.now().plusDays(coupon.getValid_days())
+                    LocalDate.now().plusDays(coupon.getValidDays())
             );
 
             return userCouponRepository.save(userCoupon);

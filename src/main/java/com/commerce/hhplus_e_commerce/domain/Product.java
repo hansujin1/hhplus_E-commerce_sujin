@@ -7,27 +7,27 @@ import java.time.LocalDate;
 
 @Getter
 public class Product {
-    private Long product_id;
-    private final String product_name;
+    private Long productId;
+    private final String productName;
     private int stock;
     private final int price;
     private ProductStatus status;
-    private final int popularity_score;
-    private final LocalDate created_at;
+    private final int popularityScore;
+    private final LocalDate createdDt;
 
-    public void productId(Long product_id) {
-        this.product_id = product_id;
+    public void productId(Long productId) {
+        this.productId = productId;
     }
 
-    public  Product(Long product_id, String product_name, int stock, int price, ProductStatus status,
-                    int popularity_score, LocalDate created_at) {
-        this.product_id = product_id;
-        this.product_name = product_name;
+    public  Product(Long productId, String productName, int stock, int price, ProductStatus status,
+                    int popularityScore, LocalDate createdDt) {
+        this.productId = productId;
+        this.productName = productName;
         this.stock = stock;
         this.price = price;
         this.status = status;
-        this.popularity_score = popularity_score;
-        this.created_at = created_at;
+        this.popularityScore = popularityScore;
+        this.createdDt = createdDt;
     }
 
 

@@ -16,7 +16,7 @@ public class PaymentUseCase {
 
         try {
             Order order = paymentService.processPayment(orderId, req.userId());
-            return PaymentResponse.success(order.getOrder_id(), order.getFinal_price());
+            return PaymentResponse.success(order.getOrderId(), order.getFinalPrice());
 
         } catch (Exception e) {
             // 실패 → 보상 (재고/쿠폰 원복)

@@ -18,10 +18,10 @@ public class InMemoryCartRepository implements CartRepository{
 
     @Override
     public Cart save(Cart cart) {
-        if(cart.getCart_id()==null){
+        if(cart.getCartID()==null){
             cart.cartId(idGenerator.getAndIncrement());
         }
-        cartMap.put(cart.getCart_id(), cart);
+        cartMap.put(cart.getCartID(), cart);
 
         return cart;
     }
@@ -29,7 +29,7 @@ public class InMemoryCartRepository implements CartRepository{
     @Override
     public List<Cart> findAllCartItems(Long userId) {
         return cartMap.values().stream()
-                      .filter(cart -> cart.getCart_id().equals(userId))
+                      .filter(cart -> cart.getCartID().equals(userId))
                       .collect(Collectors.toList());
     }
 
@@ -37,8 +37,8 @@ public class InMemoryCartRepository implements CartRepository{
     public void deleteCartItems(Long userId, Long productId) {
         // UserID , productID가 일치하는 것 담기
         List<Long> removeKeys = cartMap.values().stream()
-                                .filter(c -> userId.equals(c.getUser_id()) && productId.equals(c.getProduct_id()))
-                                .map(Cart::getCart_id)
+                                .filter(c -> userId.equals(c.getUserId()) && productId.equals(c.getProductId()))
+                                .map(Cart::getCartID)
                                 .toList();
 
         //Map에서 삭제

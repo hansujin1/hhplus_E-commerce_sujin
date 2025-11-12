@@ -24,15 +24,15 @@ public record OrderCreateResponse(
 
         List<LineItem> lineItems = items.stream().map(item -> {
             Product product = products.stream()
-                    .filter(p -> p.getProduct_id().equals(item.productId()))
+                    .filter(p -> p.getProductId().equals(item.productId()))
                     .findFirst()
                     .orElseThrow(() -> new IllegalStateException("상품 정보 없음"));
 
             long subtotal = product.calculatePrice(item.quantity());
 
             return new LineItem(
-                    product.getProduct_id(),
-                    product.getProduct_name(),
+                    product.getProductId(),
+                    product.getProductName(),
                     item.quantity(),
                     product.getPrice(),
                     subtotal
@@ -40,11 +40,11 @@ public record OrderCreateResponse(
         }).toList();
 
         return new OrderCreateResponse(
-                order.getOrder_id(),
+                order.getOrderId(),
                 lineItems,
-                order.getTotal_price(),
-                order.getDiscount_price(),
-                order.getFinal_price(),
+                order.getTotalPrice(),
+                order.getDiscountPrice(),
+                order.getFinalPrice(),
                 OrderItemStatus.PENDING
         );
     }

@@ -10,8 +10,8 @@ public interface OrderItemsRepository {
 
     OrderItems save(OrderItems orderItems);
 
-    List<OrderItems> findOrderItemsByOrderId(Long order_id);
+    List<OrderItems> findOrderItemsByOrderId(Long orderId);
 
-    Optional<OrderItems> findByOrderItemId(Long order_item_id);
+    Optional<OrderItems> findByOrderItemId(Long orderItemId);
 
 }
