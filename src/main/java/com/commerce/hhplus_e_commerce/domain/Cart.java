@@ -4,18 +4,18 @@ import lombok.Getter;
 
 @Getter
 public class Cart {
-    private Long cart_id;
-    private final Long user_id;
-    private final Long product_id;
+    private Long cartID;
+    private final Long userId;
+    private final Long productId;
 
-    public Cart(Long cart_id, Long user_id, Long product_id) {
-        this.cart_id = cart_id;
-        this.user_id = user_id;
-        this.product_id = product_id;
+    public Cart(Long cartID, Long userId, Long productId) {
+        this.cartID = cartID;
+        this.userId = userId;
+        this.productId = productId;
     }
 
-    public void cartId(Long cart_id) {
-        this.cart_id = cart_id;
+    public void cartId(Long cartID) {
+        this.cartID = cartID;
     }
 
 }

@@ -5,10 +5,9 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum CouponStatus {
-    ISSUING("발급중"),
-    SOLD_OUT("품절"),
-    EXPIRED("만료");
+public enum DiscountType {
+    RATE("비율 할인"),
+    FIXED("금액 할인");
 
     private final String description;
 }

@@ -120,7 +120,7 @@ class PaymentServiceTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("포인트 부족");
 
-        assertThat(order.getPaid_dt()).isNull();   // 결제일 없음
+        assertThat(order.getPaidDt()).isNull();
 
         assertThat(user.getPoint()).isEqualTo(50_000);
 

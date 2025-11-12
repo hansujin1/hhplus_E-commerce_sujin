@@ -34,12 +34,12 @@ public class ProductService {
             }
 
             if (!product.isAvailable()) {
-                throw new IllegalStateException("현재 판매할 수 없는 상품입니다: " + product.getProduct_name());
+                throw new IllegalStateException("현재 판매할 수 없는 상품입니다: " + product.getProductName());
             }
 
             if (product.getStock() < item.quantity()) {
                 throw new IllegalStateException(
-                        "재고 부족: " + product.getProduct_name() +
+                        "재고 부족: " + product.getProductName() +
                                 " (요청: " + item.quantity() + ", 보유: " + product.getStock() + ")"
                 );
             }
@@ -56,7 +56,7 @@ public class ProductService {
 
         for (OrderCreateRequest.Item item : items) {
             Product product = products.stream()
-                    .filter(p -> p.getProduct_id().equals(item.productId()))
+                    .filter(p -> p.getProductId().equals(item.productId()))
                     .findFirst()
                     .orElseThrow(() -> new IllegalStateException("상품 데이터를 찾을 수 없습니다."));
 
@@ -81,7 +81,7 @@ public class ProductService {
         }
 
         Map<Long, Product> productMap = products.stream()
-                .collect(Collectors.toMap(Product::getProduct_id, p -> p));
+                .collect(Collectors.toMap(Product::getProductId, p -> p));
 
         for (Map.Entry<Long, Integer> e : qtyByProduct.entrySet()) {
             Long productId = e.getKey();
@@ -110,7 +110,7 @@ public class ProductService {
         // 동일 상품 여러 개 합쳐서 복원 (안하면 중복 복원됨)
         Map<Long, Integer> qtyByProduct = new HashMap<>();
         for (OrderItems item : orderItems) {
-            qtyByProduct.merge(item.getProduct_id(), item.getQuantity(), Integer::sum);
+            qtyByProduct.merge(item.getProductId(), item.getQuantity(), Integer::sum);
         }
 
         for (Map.Entry<Long, Integer> entry : qtyByProduct.entrySet()) {

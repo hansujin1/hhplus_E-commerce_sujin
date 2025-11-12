@@ -6,16 +6,16 @@ import java.time.LocalDate;
 
 @Getter
 public class User {
-    private final Long user_id;
-    private final String user_name;
+    private final Long userId;
+    private final String userName;
     private int point;
-    private final LocalDate created_dt;
+    private final LocalDate createdDt;
 
-    public User(Long userId,String username, int point,LocalDate created_dt) {
-        this.user_id = userId;
-        this.user_name = username;
+    public User(Long userId,String username, int point,LocalDate createdDt) {
+        this.userId = userId;
+        this.userName = username;
         this.point = point;
-        this.created_dt = created_dt;
+        this.createdDt = createdDt;
     }
 
     public void payPoint(int amount){

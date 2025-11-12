@@ -5,7 +5,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.stream.Collectors;
 
 @Repository
 public class InMemoryProductRepository implements ProductRepository{
@@ -15,10 +14,10 @@ public class InMemoryProductRepository implements ProductRepository{
 
     @Override
     public Product save(Product product) {
-        if(product.getProduct_id()==null){
+        if(product.getProductId()==null){
             product.productId(idGenerator.getAndIncrement());
         }
-        productMap.put(product.getProduct_id(), product);
+        productMap.put(product.getProductId(), product);
         return product;
     }
 
@@ -38,9 +37,9 @@ public class InMemoryProductRepository implements ProductRepository{
     @Override
     public List<Product> findTopProductsByPopularity() {
         return productMap.values().stream()
-                         .sorted(Comparator.comparingInt(Product::getPopularity_score).reversed())
+                         .sorted(Comparator.comparingInt(Product::getPopularityScore).reversed())
                          .limit(10)
-                         .collect(Collectors.toList());
+                         .toList();
     }
 
 

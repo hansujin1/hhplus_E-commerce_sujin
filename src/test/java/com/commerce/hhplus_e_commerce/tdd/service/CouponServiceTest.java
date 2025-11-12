@@ -51,8 +51,8 @@ class CouponServiceTest {
 
         UserCoupon issued = couponService.issueCoupon(userId, couponId);
 
-        assertThat(issued.getCoupon_id()).isEqualTo(couponId);
-        assertThat(issued.getUser_id()).isEqualTo(userId);
+        assertThat(issued.getCouponId()).isEqualTo(couponId);
+        assertThat(issued.getUserId()).isEqualTo(userId);
         assertThat(issued.getStatus()).isEqualTo(UserCouponStatus.ACTIVE);
         verify(coupon).issue(); // 쿠폰 발급 수량 증가 로직 호출 확인
         verify(couponRepository).save(coupon);

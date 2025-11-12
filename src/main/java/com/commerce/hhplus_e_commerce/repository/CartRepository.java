@@ -8,8 +8,8 @@ public interface CartRepository {
 
     Cart save(Cart cart);
 
-    List<Cart> findAllCartItems(Long User_id);
+    List<Cart> findAllCartItems(Long userId);
 
-    void deleteCartItems(Long User_id, Long productId);
+    void deleteCartItems(Long userId, Long productId);
 
 }

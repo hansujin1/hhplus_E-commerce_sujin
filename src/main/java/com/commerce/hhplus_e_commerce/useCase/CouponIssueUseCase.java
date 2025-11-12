@@ -19,8 +19,8 @@ public class CouponIssueUseCase {
         UserCoupon issuedCoupon = couponService.issueCoupon(req.userId(), couponId);
 
         return new CouponIssueResponse(
-                issuedCoupon.getUser_coupon_id(),
-                issuedCoupon.getCoupon_id()
+                issuedCoupon.getUserCouponId(),
+                issuedCoupon.getCouponId()
         );
     }
 

@@ -15,11 +15,11 @@ public class InMemoryCouponRepository implements CouponRepository{
 
     @Override
     public Coupon save(Coupon coupon) {
-        if(coupon.getCoupon_id() == null){
+        if(coupon.getCouponId() == null){
             coupon.couponId(idGenerator.incrementAndGet());
         }
 
-        couponMap.put(coupon.getCoupon_id(), coupon);
+        couponMap.put(coupon.getCouponId(), coupon);
 
         return coupon;
     }
@@ -30,12 +30,12 @@ public class InMemoryCouponRepository implements CouponRepository{
     }
 
     @Override
-    public Optional<Coupon> findByCouponId(Long coupon_id) {
-        if(coupon_id == null){
-            throw new RuntimeException("coupon_id is null");
+    public Optional<Coupon> findByCouponId(Long couponId) {
+        if(couponId == null){
+            throw new RuntimeException("couponId is null");
         }
 
-        return Optional.ofNullable(couponMap.get(coupon_id));
+        return Optional.ofNullable(couponMap.get(couponId));
     }
 
     // 쿠폰 발급 시 발급 수량 증가
@@ -46,7 +46,7 @@ public class InMemoryCouponRepository implements CouponRepository{
             throw new IllegalArgumentException("Coupon not found: " + couponId);
         }
 
-        if (coupon.getIssued_amount() >= coupon.getTotal_quantity()) {
+        if (coupon.getIssuedAmount() >= coupon.getTotalQuantity()) {
             throw new IllegalStateException("Coupon is sold out.");
         }
 
@@ -61,8 +61,8 @@ public class InMemoryCouponRepository implements CouponRepository{
 
         Date now = new Date();
         return coupon.getStatus().equals("ACTIVE") &&
-                now.after(coupon.getStart_date()) &&
-                now.before(coupon.getEnd_date()) &&
-                coupon.getIssued_amount() < coupon.getTotal_quantity();
+                now.after(coupon.getStartDate()) &&
+                now.before(coupon.getEndDate()) &&
+                coupon.getIssuedAmount() < coupon.getTotalQuantity();
     }
 }

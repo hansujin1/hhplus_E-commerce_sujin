@@ -12,7 +12,7 @@ public interface CouponRepository {
 
     List<Coupon> findAllCoupon();
 
-    Optional<Coupon> findByCouponId(Long coupon_id);
+    Optional<Coupon> findByCouponId(Long couponId);
 
     void issueCoupon(Long couponId);
 

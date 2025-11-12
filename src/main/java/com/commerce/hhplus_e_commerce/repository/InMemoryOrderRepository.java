@@ -18,13 +18,13 @@ public class InMemoryOrderRepository implements OrderRepository{
 
     @Override
     public Order save(Order order) {
-        if(order.getOrder_id() == null){
+        if(order.getOrderId() == null){
             order.orderId(idGenerator.getAndIncrement());
-        } else if (orderMap.containsKey(order.getOrder_id())) {
-            throw new IllegalArgumentException("Order already exists with ID: " + order.getOrder_id());
+        } else if (orderMap.containsKey(order.getOrderId())) {
+            throw new IllegalArgumentException("Order already exists with ID: " + order.getOrderId());
         }
 
-        orderMap.put(order.getOrder_id(), order);
+        orderMap.put(order.getOrderId(), order);
 
         return order;
     }
@@ -36,7 +36,7 @@ public class InMemoryOrderRepository implements OrderRepository{
             throw new IllegalArgumentException("user_id is null");
         }
         return orderMap.values().stream()
-                       .filter(order -> user_id.equals(order.getUser_id()))
+                       .filter(order -> user_id.equals(order.getUserId()))
                        .toList();
     }
 
@@ -53,7 +53,7 @@ public class InMemoryOrderRepository implements OrderRepository{
     @Override
     public Optional<Order> findByUserAndOrderId(Long userId, Long orderId) {
         return orderMap.values().stream()
-                .filter(o -> userId.equals(o.getUser_id()) && orderId.equals(o.getOrder_id()))
+                .filter(o -> userId.equals(o.getUserId()) && orderId.equals(o.getOrderId()))
                 .findFirst();
     }
 

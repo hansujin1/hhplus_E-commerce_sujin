@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.stream.Collectors;
 
 @Repository
 public class InMemoryPointHisRepository implements PointHisRepository{
@@ -17,11 +16,11 @@ public class InMemoryPointHisRepository implements PointHisRepository{
 
     @Override
     public PointHis save(PointHis pointHis) {
-        if(pointHis.getPoint_hisId()==null){
+        if(pointHis.getPointHisId()==null){
             pointHis.pointHisId(idGenerator.getAndIncrement());
         }
 
-        pointHisMap.put(pointHis.getPoint_hisId(),pointHis);
+        pointHisMap.put(pointHis.getPointHisId(),pointHis);
 
         return pointHis;
     }
@@ -33,7 +32,7 @@ public class InMemoryPointHisRepository implements PointHisRepository{
         }
 
         return pointHisMap.values().stream()
-                           .filter(p -> userId.equals(p.getUser_id()))
-                           .collect(Collectors.toList());
+                           .filter(p -> userId.equals(p.getUserId()))
+                           .toList();
     }
 }

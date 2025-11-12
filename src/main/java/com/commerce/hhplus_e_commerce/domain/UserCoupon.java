@@ -7,34 +7,34 @@ import java.time.LocalDate;
 
 @Getter
 public class UserCoupon {
-    private Long user_coupon_id;
-    private final Long coupon_id;
-    private final Long user_id;
+    private Long userCouponId;
+    private final Long couponId;
+    private final Long userId;
     private UserCouponStatus status;
-    private final LocalDate issued_date;
-    private LocalDate used_date;
-    private final LocalDate expires_date;
+    private final LocalDate issuedDt;
+    private LocalDate usedDt;
+    private final LocalDate expiresDt;
 
-    public void userCouponId(Long user_coupon_id) {
-        this.user_coupon_id = user_coupon_id;
+    public void userCouponId(Long userCouponId) {
+        this.userCouponId = userCouponId;
     }
 
-   public UserCoupon(Long user_coupon_id,Long coupon_id,Long user_id,UserCouponStatus status,LocalDate issued_date,
-                     LocalDate used_date,LocalDate expires_date) {
-        this.user_coupon_id = user_coupon_id;
-        this.coupon_id = coupon_id;
-        this.user_id = user_id;
+   public UserCoupon(Long userCouponId,Long couponId,Long userId,UserCouponStatus status,LocalDate issuedDt,
+                     LocalDate usedDt,LocalDate expiresDt) {
+        this.userCouponId = userCouponId;
+        this.couponId = couponId;
+        this.userId = userId;
         this.status = status;
-        this.issued_date = issued_date;
-        this.used_date = used_date;
-        this.expires_date = expires_date;
+        this.issuedDt = issuedDt;
+        this.usedDt = usedDt;
+        this.expiresDt = expiresDt;
 
    }
 
    //쿠폰사용 상태 확인
    public boolean isValid() {
        LocalDate now = LocalDate.now();
-       boolean notExpired = (expires_date == null) || !now.isAfter(expires_date);
+       boolean notExpired = (expiresDt == null) || !now.isAfter(expiresDt);
        return status == UserCouponStatus.ACTIVE && notExpired;
    }
 
@@ -43,7 +43,7 @@ public class UserCoupon {
             throw new IllegalStateException("사용할 수 없는 쿠폰입니다");
         }
         this.status = UserCouponStatus.USED;
-        this.used_date = LocalDate.now();
+        this.usedDt = LocalDate.now();
     }
 
     public void expire() {

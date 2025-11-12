@@ -10,9 +10,9 @@ public interface OrderRepository {
 
     Order save(Order order);
 
-    List<Order> findAllOrderByUserId(Long user_id);
+    List<Order> findAllOrderByUserId(Long userId);
 
-    Optional<Order> findByOrderId(Long order_id);
+    Optional<Order> findByOrderId(Long orderId);
 
-    Optional<Order> findByUserAndOrderId(Long user_id, Long order_id);
+    Optional<Order> findByUserAndOrderId(Long userId, Long orderId);
 }

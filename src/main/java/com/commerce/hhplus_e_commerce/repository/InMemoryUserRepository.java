@@ -15,10 +15,10 @@ public class InMemoryUserRepository implements UserRepository{
     @Override
     public User save(User user) {
 
-        if(user.getUser_id() == null){
+        if(user.getUserId() == null){
             throw new IllegalArgumentException("ID가 넘어오지 않음");
         }
-        userMap.put(user.getUser_id(), user);
+        userMap.put(user.getUserId(), user);
 
         return user;
     }
