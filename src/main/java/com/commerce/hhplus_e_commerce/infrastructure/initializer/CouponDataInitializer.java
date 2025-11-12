@@ -2,6 +2,7 @@ package com.commerce.hhplus_e_commerce.infrastructure.initializer;
 
 import com.commerce.hhplus_e_commerce.domain.Coupon;
 import com.commerce.hhplus_e_commerce.domain.enums.CouponStatus;
+import com.commerce.hhplus_e_commerce.domain.enums.DiscountType;
 import com.commerce.hhplus_e_commerce.repository.CouponRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +33,7 @@ public class CouponDataInitializer {
         cal.set(2025, Calendar.DECEMBER, 31);
         Date endDate1 = cal.getTime();
 
-        couponRepository.save(new Coupon(1L, "첫구매 15% 할인 쿠폰", 0.15, "RATE",
+        couponRepository.save(new Coupon(1L, "첫구매 15% 할인 쿠폰", 0.15, DiscountType.FIXED,
                 1000,100,startDate1,endDate1,30, CouponStatus.ISSUING
         ));
 
@@ -43,7 +44,7 @@ public class CouponDataInitializer {
         Date endDate2 = cal.getTime();
 
         couponRepository.save(new Coupon(2L,"겨울대비 20,000원 할인 쿠폰",20000.0,
-                "AMOUNT",500,50,startDate2,endDate2,15, CouponStatus.ISSUING
+                DiscountType.RATE,500,50,startDate2,endDate2,15, CouponStatus.ISSUING
         ));
     }
 

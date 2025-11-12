@@ -1,6 +1,7 @@
 package com.commerce.hhplus_e_commerce.domain;
 
 import com.commerce.hhplus_e_commerce.domain.enums.CouponStatus;
+import com.commerce.hhplus_e_commerce.domain.enums.DiscountType;
 import lombok.Getter;
 
 import java.util.Date;
@@ -10,7 +11,7 @@ public class Coupon {
     private Long couponId;
     private final String couponName;
     private final double discountRate;
-    private final String discountType;
+    private final DiscountType discountType;
     private final int totalQuantity;
     private int issuedAmount; // 발급수량
     private final Date startDate;
@@ -18,7 +19,7 @@ public class Coupon {
     private final int validDays; //사용가능 일자
     private final CouponStatus status;
 
-    public Coupon(Long couponId,String couponName,double discountRate,String discountType,int totalQuantity,
+    public Coupon(Long couponId,String couponName,double discountRate,DiscountType discountType,int totalQuantity,
                   int issuedAmount, Date startDate, Date endDate, int validDays, CouponStatus status){
         this.couponId = couponId;
         this.couponName = couponName;
@@ -60,11 +61,11 @@ public class Coupon {
 
    /** 할인가 계산 */
     public int calculateDiscount(int totalPrice) {
-        if ("RATE".equalsIgnoreCase(discountType)) {
-            return (int) Math.floor(totalPrice * discountRate);
-        }
-        if ("FIXED".equalsIgnoreCase(discountType)) {
+        if(DiscountType.FIXED.equals(discountType)) {
             return (int) discountRate;
+        }
+        if(DiscountType.RATE.equals(discountType)) {
+            return (int) Math.floor(totalPrice * discountRate);
         }
         throw new IllegalStateException("지원하지 않는 할인 타입: " + discountType);
     }

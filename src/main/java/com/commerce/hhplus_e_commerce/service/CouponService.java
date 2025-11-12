@@ -51,7 +51,7 @@ public class CouponService {
         UserCoupon userCoupon = userCouponRepository.findUserCoupon(userId, couponId)
                 .orElseThrow(() -> new IllegalStateException("쿠폰을 찾을 수 없습니다: " + couponId));
 
-        userCoupon.use(); // 도메인 메서드 → 상태 ACTIVE → USED 변경
+        userCoupon.use();
         userCouponRepository.save(userCoupon);
     }
 
@@ -60,7 +60,7 @@ public class CouponService {
         UserCoupon userCoupon = userCouponRepository.findUserCoupon(userId, couponId)
                 .orElseThrow(() -> new IllegalStateException("쿠폰을 찾을 수 없습니다: " + couponId));
 
-        if (userCoupon.getStatus().name().equals("USED")) {
+        if(userCoupon.getStatus().equals(UserCouponStatus.USED)){
             userCoupon.activate();
             userCouponRepository.save(userCoupon);
         }
@@ -83,7 +83,7 @@ public class CouponService {
             coupon.issue();
             couponRepository.save(coupon);
 
-            // 유저에게 쿠폰 지급
+
             UserCoupon userCoupon = new UserCoupon(
                     null,
                     couponId,
