@@ -56,8 +56,7 @@ class PaymentServiceTest {
 
 
         Order order = new Order(
-                orderId
-                ,userId
+                userId
                 ,100_000
                 ,30_000
                 ,70_000
@@ -65,9 +64,7 @@ class PaymentServiceTest {
                 ,null
                 ,couponId
         );
-        User user = new User(
-                userId
-                ,"김남준"
+        User user = new User("김남준"
                 ,100_000
         );
 
@@ -92,8 +89,7 @@ class PaymentServiceTest {
     @Test
     void processPaymentFail()  {
         Order order = new Order(
-                orderId
-                ,userId
+                  userId
                 ,100_000
                 ,30_000
                 ,70_000
@@ -101,9 +97,7 @@ class PaymentServiceTest {
                 ,null
                 ,couponId
         );
-        User user = new User(
-                userId
-                ,"김남준"
+        User user = new User("김남준"
                 ,50_000
         );
         when(orderRepository.findByOrderId(orderId)).thenReturn(Optional.of(order));

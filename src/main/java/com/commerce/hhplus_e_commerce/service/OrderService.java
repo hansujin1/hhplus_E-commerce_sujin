@@ -17,7 +17,6 @@ public class OrderService {
         int finalPrice = totalPrice - discountPrice;
 
         Order order = new Order(
-                null,             // PK는 DB에서 생성
                 userId,
                 totalPrice,
                 discountPrice,

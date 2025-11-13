@@ -35,9 +35,8 @@ public class Product {
         this.productId = productId;
     }
 
-    public  Product(Long productId, String productName, int stock, int price, ProductStatus status,
+    public  Product( String productName, int stock, int price, ProductStatus status,
                     int popularityScore) {
-        this.productId = productId;
         this.productName = productName;
         this.stock = stock;
         this.price = price;

@@ -26,8 +26,8 @@ public class UserCouponDataInitializer {
         LocalDate expire1    = LocalDate.of(2025, 11, 30);
         LocalDate expire2    = LocalDate.of(2025, 11, 16);
 
-        userCouponRepository.save(new UserCoupon(1L,1L,20250202L, UserCouponStatus.ACTIVE,expire1));
-        userCouponRepository.save(new UserCoupon(2L,2L,20250202L,UserCouponStatus.USED,expire2));
+        userCouponRepository.save(new UserCoupon(1L,20250202L, UserCouponStatus.ACTIVE,expire1));
+        userCouponRepository.save(new UserCoupon(2L,20250202L,UserCouponStatus.USED,expire2));
     }
 
 

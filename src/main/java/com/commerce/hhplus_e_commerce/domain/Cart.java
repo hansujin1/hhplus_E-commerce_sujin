@@ -23,14 +23,10 @@ public class Cart {
     @Column(name = "product_id", nullable = false)
     private Long productId;
 
-    public Cart(Long cartID, Long userId, Long productId) {
-        this.cartID = cartID;
+    public Cart( Long userId, Long productId) {
         this.userId = userId;
         this.productId = productId;
     }
 
-    public void cartId(Long cartID) {
-        this.cartID = cartID;
-    }
 
 }

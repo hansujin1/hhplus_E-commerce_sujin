@@ -35,9 +35,8 @@ public class UserCoupon {
         this.userCouponId = userCouponId;
     }
 
-   public UserCoupon(Long userCouponId,Long couponId,Long userId,UserCouponStatus status
+   public UserCoupon(Long couponId,Long userId,UserCouponStatus status
                      ,LocalDate expiresDt) {
-        this.userCouponId = userCouponId;
         this.couponId = couponId;
         this.userId = userId;
         this.status = status;

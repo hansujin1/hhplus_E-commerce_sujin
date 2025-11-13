@@ -85,7 +85,6 @@ public class CouponService {
 
 
             UserCoupon userCoupon = new UserCoupon(
-                    null,
                     couponId,
                     userId,
                     UserCouponStatus.ACTIVE,

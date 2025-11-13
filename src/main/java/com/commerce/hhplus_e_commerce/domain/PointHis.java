@@ -27,15 +27,11 @@ public class PointHis {
     @Column(name = "created_dt" , nullable = false)
     private LocalDate createdDt;
 
-    public PointHis(Long pointHisId, Long userId, PointType type, int point) {
-        this.pointHisId = pointHisId;
+    public PointHis(Long userId, PointType type, int point) {
         this.userId = userId;
         this.type = type;
         this.point = point;
         this.createdDt = LocalDate.now();
     }
 
-    public void pointHisId(Long pointHisId) {
-        this.pointHisId = pointHisId;
-    }
 }

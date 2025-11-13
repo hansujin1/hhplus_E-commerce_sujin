@@ -33,9 +33,8 @@ public class Order {
     @Column(name = "user_coupon_id")
     private  Long userCouponId;
 
-    public Order(Long orderId, Long userId, int totalPrice, int discountPrice, int finalPrice,
+    public Order(Long userId, int totalPrice, int discountPrice, int finalPrice,
                  int cancelledPrice, LocalDate paidDt,Long userCouponId) {
-        this.orderId = orderId;
         this.userId = userId;
         this.totalPrice = totalPrice;
         this.discountPrice = discountPrice;

@@ -23,8 +23,7 @@ public class User {
     @Column(name = "created_dt", nullable = false)
     private  LocalDate createdDt;
 
-    public User(Long userId,String username, int point) {
-        this.userId = userId;
+    public User(String username, int point) {
         this.userName = username;
         this.point = point;
         this.createdDt = LocalDate.now();

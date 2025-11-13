@@ -39,9 +39,8 @@ public class Coupon {
     @Column(name = "status", nullable = false)
     private  CouponStatus status;
 
-    public Coupon(Long couponId, String couponName, double discountRate, DiscountType discountType, int totalQuantity,
+    public Coupon( String couponName, double discountRate, DiscountType discountType, int totalQuantity,
                   int issuedQuantity, LocalDate startDate, LocalDate endDate, int validDays, CouponStatus status){
-        this.couponId = couponId;
         this.couponName = couponName;
         this.discountRate = discountRate;
         this.discountType = discountType;
@@ -53,8 +52,18 @@ public class Coupon {
         this.status = status;
     }
 
-    public void couponId(Long couponId){
+    public Coupon(Long couponId, String couponName, double discountRate, DiscountType discountType, int totalQuantity,
+                   int issuedQuantity, LocalDate startDate, LocalDate endDate, int validDays, CouponStatus status){
         this.couponId = couponId;
+        this.couponName = couponName;
+        this.discountRate = discountRate;
+        this.discountType = discountType;
+        this.totalQuantity = totalQuantity;
+        this.issuedQuantity = issuedQuantity;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.validDays = validDays;
+        this.status = status;
     }
 
     /** 발급 가능 기간인지 검증 */

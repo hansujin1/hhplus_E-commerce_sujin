@@ -37,8 +37,7 @@ class OrderServiceTest {
         Long couponId = 2L;
 
         Order order = new Order(
-                                null
-                                ,userId
+                                userId
                                 ,100_000
                                 ,30_000
                                 ,70_000

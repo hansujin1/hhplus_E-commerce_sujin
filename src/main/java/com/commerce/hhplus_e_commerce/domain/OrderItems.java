@@ -29,9 +29,8 @@ public class OrderItems {
     @Column(name = "quantity", nullable = false)
     private  int quantity;
 
-    public OrderItems(Long orderItemId,Long orderId,Long productId, String productName,
+    public OrderItems(Long orderId,Long productId, String productName,
                       int productPrice, OrderItemStatus status, int quantity) {
-        this.orderItemId = orderItemId;
         this.orderId = orderId;
         this.productId = productId;
         this.productName = productName;
@@ -41,8 +40,5 @@ public class OrderItems {
 
     }
 
-    public void orderItemId(Long orderItemId) {
-        this.orderItemId = orderItemId;
-    }
 
 }
