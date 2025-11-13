@@ -54,7 +54,7 @@ class OrderServiceTest {
 
         Order result = orderService.createOrder(userId,100_000,30_000,couponId);
 
-        assertThat(result.getFinal_price()).isEqualTo(order.getFinal_price());
+        assertThat(result.getFinalPrice()).isEqualTo(order.getFinalPrice());
         assertThat(result.getUserCouponId()).isEqualTo(order.getUserCouponId());
         verify(orderRepository).save(any(Order.class));
 
