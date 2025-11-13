@@ -1,33 +1,49 @@
 package com.commerce.hhplus_e_commerce.domain;
 
 import com.commerce.hhplus_e_commerce.domain.enums.ProductStatus;
+import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
+@Entity
+@Table(name = "products")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Product {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "product_id")
     private Long productId;
-    private final String productName;
+    @Column(name = "product_name", nullable = false)
+    private  String productName;
+    @Column(name = "stock", nullable = false)
     private int stock;
-    private final int price;
+    @Column(name = "price", nullable = false)
+    private  int price;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
     private ProductStatus status;
-    private final int popularityScore;
-    private final LocalDate createdDt;
+    @Column(name = "popularity_score")
+    private  int popularityScore;
+    @Column(name = "created_dt", nullable = false)
+    private  LocalDate createdDt;
 
     public void productId(Long productId) {
         this.productId = productId;
     }
 
     public  Product(Long productId, String productName, int stock, int price, ProductStatus status,
-                    int popularityScore, LocalDate createdDt) {
+                    int popularityScore) {
         this.productId = productId;
         this.productName = productName;
         this.stock = stock;
         this.price = price;
         this.status = status;
         this.popularityScore = popularityScore;
-        this.createdDt = createdDt;
+        this.createdDt = LocalDate.now();
     }
 
 

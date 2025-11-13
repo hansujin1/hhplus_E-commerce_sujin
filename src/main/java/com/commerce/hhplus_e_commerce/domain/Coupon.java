@@ -2,22 +2,42 @@ package com.commerce.hhplus_e_commerce.domain;
 
 import com.commerce.hhplus_e_commerce.domain.enums.CouponStatus;
 import com.commerce.hhplus_e_commerce.domain.enums.DiscountType;
+import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
+@Entity
+@Table(name = "coupons")
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Coupon {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "coupon_id")
     private Long couponId;
-    private final String couponName;
-    private final double discountRate;
-    private final DiscountType discountType;
-    private final int totalQuantity;
+    @Column(name = "coupon_name", nullable = false)
+    private  String couponName;
+    @Column(name = "discount_rate", nullable = false)
+    private  double discountRate;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "discount_type", nullable = false)
+    private  DiscountType discountType;
+    @Column(name = "total_quantity", nullable = false)
+    private  int totalQuantity;
+    @Column(name = "issued_quantity")
     private int issuedQuantity; // 발급수량
-    private final LocalDate startDate;
-    private final LocalDate endDate;
-    private final int validDays; //사용가능 일자
-    private final CouponStatus status;
+    @Column(name = "start_date")
+    private  LocalDate startDate;
+    @Column(name = "end_date")
+    private  LocalDate endDate;
+    @Column(name = "valid_days", nullable = false)
+    private  int validDays; //사용가능 일자
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private  CouponStatus status;
 
     public Coupon(Long couponId, String couponName, double discountRate, DiscountType discountType, int totalQuantity,
                   int issuedQuantity, LocalDate startDate, LocalDate endDate, int validDays, CouponStatus status){

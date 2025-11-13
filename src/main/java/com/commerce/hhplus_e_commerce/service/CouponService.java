@@ -89,8 +89,6 @@ public class CouponService {
                     couponId,
                     userId,
                     UserCouponStatus.ACTIVE,
-                    LocalDate.now(),
-                    null,
                     LocalDate.now().plusDays(coupon.getValidDays())
             );
 

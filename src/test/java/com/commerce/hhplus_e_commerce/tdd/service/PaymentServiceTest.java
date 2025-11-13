@@ -15,7 +15,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -42,14 +41,12 @@ class PaymentServiceTest {
     private Long userId;
     private Long couponId;
     private Long orderId;
-    private LocalDate createdDt;
 
     @BeforeEach
     void setUp() {
         userId = 1L;
         couponId = 2L;
         orderId = 1L;
-        createdDt = LocalDate.now();
     }
 
 
@@ -65,7 +62,6 @@ class PaymentServiceTest {
                 ,30_000
                 ,70_000
                 ,0
-                ,createdDt
                 ,null
                 ,couponId
         );
@@ -73,7 +69,6 @@ class PaymentServiceTest {
                 userId
                 ,"김남준"
                 ,100_000
-                ,createdDt
         );
 
         when(orderRepository.findByOrderId(orderId)).thenReturn(Optional.of(order));
@@ -103,7 +98,6 @@ class PaymentServiceTest {
                 ,30_000
                 ,70_000
                 ,0
-                ,createdDt
                 ,null
                 ,couponId
         );
@@ -111,7 +105,6 @@ class PaymentServiceTest {
                 userId
                 ,"김남준"
                 ,50_000
-                ,createdDt
         );
         when(orderRepository.findByOrderId(orderId)).thenReturn(Optional.of(order));
         when(userRepository.findByUserId(userId)).thenReturn(Optional.of(user));

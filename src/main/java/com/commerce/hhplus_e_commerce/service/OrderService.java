@@ -6,7 +6,6 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 @Service
 @RequiredArgsConstructor
 public class OrderService {
@@ -23,8 +22,7 @@ public class OrderService {
                 totalPrice,
                 discountPrice,
                 finalPrice,
-                0,                // 취소 금액 없음
-                LocalDate.now(),       // 주문 생성 시간 now
+                0,     // 주문 생성 시간 now
                 null,             // 결제 전이므로 paid_dt = null
                 couponId
         );

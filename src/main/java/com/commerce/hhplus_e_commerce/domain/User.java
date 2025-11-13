@@ -1,21 +1,33 @@
 package com.commerce.hhplus_e_commerce.domain;
 
+import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
+@Entity
+@Table(name = "users")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class User {
-    private final Long userId;
-    private final String userName;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
+    private  Long userId;
+    @Column(name = "user_name", nullable = false)
+    private  String userName;
+    @Column(name = "point")
     private int point;
-    private final LocalDate createdDt;
+    @Column(name = "created_dt", nullable = false)
+    private  LocalDate createdDt;
 
-    public User(Long userId,String username, int point,LocalDate createdDt) {
+    public User(Long userId,String username, int point) {
         this.userId = userId;
         this.userName = username;
         this.point = point;
-        this.createdDt = createdDt;
+        this.createdDt = LocalDate.now();
     }
 
     public void payPoint(int amount){

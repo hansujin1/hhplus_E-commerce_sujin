@@ -12,7 +12,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,8 +31,6 @@ class ProductServiceTest {
 
     Long productId1 = 1L;
     Long productId2 = 2L;
-    LocalDate date1 = LocalDate.now();
-    LocalDate date2 = LocalDate.now();
 
 
     @Test
@@ -45,16 +42,14 @@ class ProductServiceTest {
                 ,10
                 ,10_000
                 , ProductStatus.SALE
-                ,25
-                ,date1);
+                ,25);
 
         Product product2 = new Product(productId2
                 ,"상품2"
                 ,5
                 ,15_000
                 , ProductStatus.SALE
-                ,50
-                ,date2);
+                ,50);
 
 
         when(productRepository.selectByProductId(productId1)).thenReturn(product1);
@@ -77,8 +72,7 @@ class ProductServiceTest {
                 ,2
                 ,10_000
                 , ProductStatus.SALE
-                ,25
-                ,date1);
+                ,25);
 
         when(productRepository.selectByProductId(productId1)).thenReturn(product1);
         List<OrderCreateRequest.Item> items = new ArrayList<>();
@@ -99,16 +93,14 @@ class ProductServiceTest {
                 ,10
                 ,10_000
                 , ProductStatus.SALE
-                ,25
-                ,date1);
+                ,25);
 
         Product product2 = new Product(productId2
                 ,"상품2"
                 ,5
                 ,15_000
                 , ProductStatus.SALE
-                ,50
-                ,date2);
+                ,50);
 
         List<OrderCreateRequest.Item> items = List.of(
                  new OrderCreateRequest.Item(productId1,2)

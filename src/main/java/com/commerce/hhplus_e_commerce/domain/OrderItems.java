@@ -1,17 +1,33 @@
 package com.commerce.hhplus_e_commerce.domain;
 
 import com.commerce.hhplus_e_commerce.domain.enums.OrderItemStatus;
+import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@Entity
+@Table(name = "order_items")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OrderItems {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "order_item_id")
     private Long orderItemId;
-    private final Long orderId;
-    private final Long productId;
-    private final String productName;
-    private final int productPrice;
-    private final OrderItemStatus status;
-    private final int quantity;
+    @Column(name = "order_id", nullable = false)
+    private  Long orderId;
+    @Column(name = "product_id", nullable = false)
+    private  Long productId;
+    @Column(name = "product_name", nullable = false)
+    private  String productName;
+    @Column(name = "product_price", nullable = false)
+    private  int productPrice;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private  OrderItemStatus status;
+    @Column(name = "quantity", nullable = false)
+    private  int quantity;
 
     public OrderItems(Long orderItemId,Long orderId,Long productId, String productName,
                       int productPrice, OrderItemStatus status, int quantity) {

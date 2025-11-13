@@ -10,7 +10,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -36,7 +35,6 @@ class OrderServiceTest {
     void createOrder() {
         Long userId = 1L;
         Long couponId = 2L;
-        LocalDate created_dt = LocalDate.now();
 
         Order order = new Order(
                                 null
@@ -45,7 +43,6 @@ class OrderServiceTest {
                                 ,30_000
                                 ,70_000
                                 ,0
-                                ,created_dt
                                 ,null
                                 ,couponId
         );

@@ -70,8 +70,6 @@ class CouponServiceTest {
                                                        ,couponId
                                                        ,userId
                                                        ,UserCouponStatus.ACTIVE
-                                                       ,issued_date
-                                                       ,null
                                                        ,issued_date.plusDays(30))));
 
 
