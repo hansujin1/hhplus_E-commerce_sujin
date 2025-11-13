@@ -1,8 +1,10 @@
 package com.commerce.hhplus_e_commerce.repository;
 
 import com.commerce.hhplus_e_commerce.domain.Coupon;
+import com.commerce.hhplus_e_commerce.domain.enums.CouponStatus;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -46,7 +48,7 @@ public class InMemoryCouponRepository implements CouponRepository{
             throw new IllegalArgumentException("Coupon not found: " + couponId);
         }
 
-        if (coupon.getIssuedAmount() >= coupon.getTotalQuantity()) {
+        if (coupon.getIssuedQuantity() >= coupon.getTotalQuantity()) {
             throw new IllegalStateException("Coupon is sold out.");
         }
 
@@ -59,10 +61,10 @@ public class InMemoryCouponRepository implements CouponRepository{
         Coupon coupon = couponMap.get(couponId);
         if (coupon == null) return false;
 
-        Date now = new Date();
-        return coupon.getStatus().equals("ACTIVE") &&
-                now.after(coupon.getStartDate()) &&
-                now.before(coupon.getEndDate()) &&
-                coupon.getIssuedAmount() < coupon.getTotalQuantity();
+        LocalDate now = LocalDate.now();
+        return coupon.getStatus().equals(CouponStatus.ISSUING) &&
+                now.isAfter(coupon.getStartDate()) &&
+                now.isBefore(coupon.getEndDate()) &&
+                coupon.getIssuedQuantity() < coupon.getTotalQuantity();
     }
 }

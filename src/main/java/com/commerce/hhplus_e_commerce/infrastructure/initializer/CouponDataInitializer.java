@@ -8,8 +8,8 @@ import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.Month;
 
 
 @Slf4j
@@ -26,22 +26,16 @@ public class CouponDataInitializer {
     public void init(){
         log.info("coupon 정보 초기 셋팅하기");
 
-        Calendar cal = Calendar.getInstance();
-        
-        cal.set(2025, Calendar.JANUARY, 1);
-        Date startDate1 = cal.getTime();
-        cal.set(2025, Calendar.DECEMBER, 31);
-        Date endDate1 = cal.getTime();
+        LocalDate startDate1 = LocalDate.of(2025, Month.JANUARY, 1);
+        LocalDate endDate1   = LocalDate.of(2025, Month.DECEMBER, 31);
 
         couponRepository.save(new Coupon(1L, "첫구매 15% 할인 쿠폰", 0.15, DiscountType.FIXED,
                 1000,100,startDate1,endDate1,30, CouponStatus.ISSUING
         ));
 
 
-        cal.set(2025, Calendar.FEBRUARY, 1);
-        Date startDate2 = cal.getTime();
-        cal.set(2025, Calendar.JUNE, 30);
-        Date endDate2 = cal.getTime();
+        LocalDate startDate2 = LocalDate.of(2025, Month.FEBRUARY, 1);
+        LocalDate endDate2   = LocalDate.of(2025, Month.JUNE, 30);
 
         couponRepository.save(new Coupon(2L,"겨울대비 20,000원 할인 쿠폰",20000.0,
                 DiscountType.RATE,500,50,startDate2,endDate2,15, CouponStatus.ISSUING
