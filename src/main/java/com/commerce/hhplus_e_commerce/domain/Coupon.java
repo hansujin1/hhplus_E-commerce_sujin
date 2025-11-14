@@ -91,7 +91,7 @@ public class Coupon {
    /** 할인가 계산 */
     public int calculateDiscount(int totalPrice) {
         if(DiscountType.FIXED.equals(discountType)) {
-            return (int) discountRate;
+            return (int) Math.floor(totalPrice - discountRate);
         }
         if(DiscountType.RATE.equals(discountType)) {
             return (int) Math.floor(totalPrice * discountRate);
