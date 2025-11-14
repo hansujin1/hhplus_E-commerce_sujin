@@ -14,12 +14,14 @@ CREATE TABLE PRODUCTS (
                           popularity_score INT DEFAULT 0,
                           created_dt DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+CREATE INDEX idx_products_status ON PRODUCTS(status);
 
 CREATE TABLE CART (
                       cart_id BIGINT PRIMARY KEY AUTO_INCREMENT,
                       user_id BIGINT NOT NULL,
                       product_id BIGINT NOT NULL
 );
+CREATE INDEX idx_cart_user ON CART(user_id);
 
 CREATE TABLE COUPONS (
                          coupon_id BIGINT PRIMARY KEY AUTO_INCREMENT,
@@ -45,6 +47,9 @@ CREATE TABLE ORDERS (
                         paid_dt DATETIME,
                         user_coupon_id BIGINT
 );
+CREATE INDEX idx_orders_user ON ORDERS(user_id, created_dt);
+CREATE INDEX idx_orders_coupon ON ORDERS(user_coupon_id);
+
 
 CREATE TABLE ORDER_ITEMS (
                              order_item_id BIGINT PRIMARY KEY AUTO_INCREMENT,
@@ -55,6 +60,9 @@ CREATE TABLE ORDER_ITEMS (
                              status VARCHAR(20),
                              quantity INT DEFAULT 1
 );
+CREATE INDEX idx_order_items_order ON ORDER_ITEMS(order_id);
+CREATE INDEX idx_order_items_product ON ORDER_ITEMS(product_id);
+
 
 CREATE TABLE POINT_HIS (
                            point_his_id BIGINT PRIMARY KEY AUTO_INCREMENT,
@@ -73,3 +81,5 @@ CREATE TABLE USER_COUPONS (
                               used_dt DATETIME,
                               expires_dt DATETIME
 );
+CREATE INDEX idx_user_coupons_user ON USER_COUPONS(user_id, status);
+CREATE INDEX idx_user_coupons_coupon ON USER_COUPONS(coupon_id);
