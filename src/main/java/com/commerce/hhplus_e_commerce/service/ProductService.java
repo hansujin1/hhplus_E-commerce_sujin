@@ -8,10 +8,7 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -56,7 +53,7 @@ public class ProductService {
 
         for (OrderCreateRequest.Item item : items) {
             Product product = products.stream()
-                    .filter(p -> p.getProductId().equals(item.productId()))
+                    .filter(p -> Objects.equals(p.getProductId(), item.productId()))
                     .findFirst()
                     .orElseThrow(() -> new IllegalStateException("상품 데이터를 찾을 수 없습니다."));
 

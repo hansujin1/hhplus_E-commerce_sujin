@@ -4,7 +4,9 @@ import com.commerce.hhplus_e_commerce.domain.Order;
 import com.commerce.hhplus_e_commerce.dto.PaymentRequest;
 import com.commerce.hhplus_e_commerce.dto.PaymentResponse;
 import com.commerce.hhplus_e_commerce.service.PaymentService;
+import org.springframework.stereotype.Component;
 
+@Component
 public class PaymentUseCase {
     private final PaymentService paymentService;
 

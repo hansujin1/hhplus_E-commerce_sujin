@@ -85,12 +85,9 @@ public class CouponService {
 
 
             UserCoupon userCoupon = new UserCoupon(
-                    null,
                     couponId,
                     userId,
                     UserCouponStatus.ACTIVE,
-                    LocalDate.now(),
-                    null,
                     LocalDate.now().plusDays(coupon.getValidDays())
             );
 

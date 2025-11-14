@@ -12,7 +12,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,30 +31,26 @@ class ProductServiceTest {
 
     Long productId1 = 1L;
     Long productId2 = 2L;
-    LocalDate date1 = LocalDate.now();
-    LocalDate date2 = LocalDate.now();
 
 
     @Test
     @DisplayName("상품에 대한 validate 확인")
     void validateProduct()  {
 
-        Product product1 = new Product(productId1
-                ,"상품1"
+        Product product1 = new Product("상품1"
                 ,10
                 ,10_000
                 , ProductStatus.SALE
-                ,25
-                ,date1);
+                ,25);
 
-        Product product2 = new Product(productId2
-                ,"상품2"
+        Product product2 = new Product("상품2"
                 ,5
                 ,15_000
                 , ProductStatus.SALE
-                ,50
-                ,date2);
+                ,50);
 
+        product1.productId(productId1);
+        product2.productId(productId2);
 
         when(productRepository.selectByProductId(productId1)).thenReturn(product1);
         when(productRepository.selectByProductId(productId2)).thenReturn(product2);
@@ -72,13 +67,12 @@ class ProductServiceTest {
     @Test
     @DisplayName("재고가 부족한 경우")
     void stockLake(){
-        Product product1 = new Product(productId1
-                ,"상품1"
+        Product product1 = new Product("상품1"
                 ,2
                 ,10_000
                 , ProductStatus.SALE
-                ,25
-                ,date1);
+                ,25);
+        product1.productId(productId1);
 
         when(productRepository.selectByProductId(productId1)).thenReturn(product1);
         List<OrderCreateRequest.Item> items = new ArrayList<>();
@@ -94,21 +88,19 @@ class ProductServiceTest {
     @Test
     @DisplayName("전체 금액 계산하기")
     void calculateTotalPrice(){
-        Product product1 = new Product(productId1
-                ,"상품1"
+        Product product1 = new Product("상품1"
                 ,10
                 ,10_000
                 , ProductStatus.SALE
-                ,25
-                ,date1);
+                ,25);
 
-        Product product2 = new Product(productId2
-                ,"상품2"
+        Product product2 = new Product("상품2"
                 ,5
                 ,15_000
                 , ProductStatus.SALE
-                ,50
-                ,date2);
+                ,50);
+        product1.productId(productId1);
+        product2.productId(productId2);
 
         List<OrderCreateRequest.Item> items = List.of(
                  new OrderCreateRequest.Item(productId1,2)
