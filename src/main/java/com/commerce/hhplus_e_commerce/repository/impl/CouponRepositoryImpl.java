@@ -3,6 +3,7 @@ package com.commerce.hhplus_e_commerce.repository.impl;
 import com.commerce.hhplus_e_commerce.domain.Coupon;
 import com.commerce.hhplus_e_commerce.repository.CouponRepository;
 import com.commerce.hhplus_e_commerce.repository.jpa.CouponJpaRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -31,6 +32,7 @@ public class CouponRepositoryImpl implements CouponRepository {
     }
 
     @Override
+    @Transactional
     public void issueCoupon(Long couponId) {
         Coupon coupon = couponJpaRepository.findByCouponId(couponId)
                 .orElseThrow(() -> new IllegalStateException("쿠폰을 찾을 수 없습니다."));
@@ -40,6 +42,7 @@ public class CouponRepositoryImpl implements CouponRepository {
     }
 
     @Override
+    @Transactional
     public boolean isAvailable(Long couponId) {
         return couponJpaRepository.findByCouponId(couponId)
                 .map(Coupon::canIssue)
