@@ -20,13 +20,13 @@ public class CartDataInitializer {
     @PostConstruct
     public void init(){
         log.info("cart Data initializer - 김남준");
-        cartRepository.save(new Cart(null,20250202L,1L));
-        cartRepository.save(new Cart(null,20250202L,3L));
-        cartRepository.save(new Cart(null,20250202L,5L));
+        cartRepository.save(new Cart(20250202L,1L));
+        cartRepository.save(new Cart(20250202L,3L));
+        cartRepository.save(new Cart(20250202L,5L));
 
         log.info("cart Data initializer - 정호석");
-        cartRepository.save(new Cart(null,20250222L,2L));
-        cartRepository.save(new Cart(null,20250222L,3L));
-        cartRepository.save(new Cart(null,20250222L,4L));
+        cartRepository.save(new Cart(20250222L,2L));
+        cartRepository.save(new Cart(20250222L,3L));
+        cartRepository.save(new Cart(20250222L,4L));
     }
 }

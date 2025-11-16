@@ -2,6 +2,8 @@ package com.commerce.hhplus_e_commerce.tdd.service;
 
 import com.commerce.hhplus_e_commerce.domain.Coupon;
 import com.commerce.hhplus_e_commerce.domain.UserCoupon;
+import com.commerce.hhplus_e_commerce.domain.enums.CouponStatus;
+import com.commerce.hhplus_e_commerce.domain.enums.DiscountType;
 import com.commerce.hhplus_e_commerce.domain.enums.UserCouponStatus;
 import com.commerce.hhplus_e_commerce.repository.CouponRepository;
 import com.commerce.hhplus_e_commerce.repository.UserCouponRepository;
@@ -65,16 +67,34 @@ class CouponServiceTest {
         Long couponId = 100L;
         LocalDate issued_date = LocalDate.now();
 
+        Coupon coupon = new Coupon(
+                couponId,
+                "테스트쿠폰",
+                10.0,
+                DiscountType.RATE,
+                100,
+                0,
+                LocalDate.now().minusDays(1),
+                LocalDate.now().plusDays(10),
+                30,
+                CouponStatus.ISSUING
+        );
+        when(couponRepository.findByCouponId(couponId))
+                .thenReturn(Optional.of(coupon));
+
+        // 2️⃣ 해당 유저는 이미 이 쿠폰을 발급받았다고 가정
+        UserCoupon userCoupon = new UserCoupon(
+                couponId,          // couponId
+                userId,            // userId
+                UserCouponStatus.ACTIVE,
+                issued_date.plusDays(30) // expiresDt
+        );
+
+        userCoupon.userCouponId(1L);
         when(userCouponRepository.findUserCoupon(userId, couponId))
-                .thenReturn(Optional.of(new UserCoupon(1L
-                                                       ,couponId
-                                                       ,userId
-                                                       ,UserCouponStatus.ACTIVE
-                                                       ,issued_date
-                                                       ,null
-                                                       ,issued_date.plusDays(30))));
+                .thenReturn(Optional.of(userCoupon));
 
-
+        // 3️⃣ 검증: 이미 발급받은 쿠폰 예외
         assertThatThrownBy(() -> couponService.issueCoupon(userId, couponId))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("이미 발급받은 쿠폰");
