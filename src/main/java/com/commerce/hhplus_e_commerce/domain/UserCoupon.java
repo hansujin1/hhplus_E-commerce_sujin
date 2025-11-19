@@ -1,32 +1,47 @@
 package com.commerce.hhplus_e_commerce.domain;
 
 import com.commerce.hhplus_e_commerce.domain.enums.UserCouponStatus;
+import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
+@Entity
+@Table(name = "user_coupons")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class UserCoupon {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_coupon_id")
     private Long userCouponId;
-    private final Long couponId;
-    private final Long userId;
+    @Column(name = "coupon_id", nullable = false)
+    private  Long couponId;
+    @Column(name = "user_id", nullable = false)
+    private  Long userId;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
     private UserCouponStatus status;
-    private final LocalDate issuedDt;
+    @Column(name = "issued_dt", nullable = false)
+    private  LocalDate issuedDt;
+    @Column(name = "used_dt")
     private LocalDate usedDt;
-    private final LocalDate expiresDt;
+    @Column(name = "expires_dt", nullable = false)
+    private  LocalDate expiresDt;
 
     public void userCouponId(Long userCouponId) {
         this.userCouponId = userCouponId;
     }
 
-   public UserCoupon(Long userCouponId,Long couponId,Long userId,UserCouponStatus status,LocalDate issuedDt,
-                     LocalDate usedDt,LocalDate expiresDt) {
-        this.userCouponId = userCouponId;
+   public UserCoupon(Long couponId,Long userId,UserCouponStatus status
+                     ,LocalDate expiresDt) {
         this.couponId = couponId;
         this.userId = userId;
         this.status = status;
-        this.issuedDt = issuedDt;
-        this.usedDt = usedDt;
+        this.issuedDt = LocalDate.now();
+        this.usedDt = null;
         this.expiresDt = expiresDt;
 
    }

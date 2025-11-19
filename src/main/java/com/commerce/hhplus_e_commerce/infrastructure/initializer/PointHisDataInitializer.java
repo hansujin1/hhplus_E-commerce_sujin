@@ -7,7 +7,6 @@ import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
 
 
 @Slf4j
@@ -23,13 +22,13 @@ public class PointHisDataInitializer {
     @PostConstruct
     public void init(){
         log.info("User의 포인트 이력 정보 초기 셋팅하기 - 김남준");
-        pointHisRepository.save(new PointHis(null,20250202L, PointType.CHARGE,150_000,new Date()));
-        pointHisRepository.save(new PointHis(null,20250202L,PointType.USE,50_000,new Date()));
+        pointHisRepository.save(new PointHis(20250202L, PointType.CHARGE,150_000));
+        pointHisRepository.save(new PointHis(20250202L,PointType.USE,50_000));
 
         log.info("User의 포인트 이력 정보 초기 셋팅하기 - 정호석");
-        pointHisRepository.save(new PointHis(null,20250222L,PointType.CHARGE,150_000,new Date()));
-        pointHisRepository.save(new PointHis(null,20250222L,PointType.USE,25_000,new Date()));
-        pointHisRepository.save(new PointHis(null,20250222L,PointType.USE,12_000,new Date()));
+        pointHisRepository.save(new PointHis(20250222L,PointType.CHARGE,150_000));
+        pointHisRepository.save(new PointHis(20250222L,PointType.USE,25_000));
+        pointHisRepository.save(new PointHis(20250222L,PointType.USE,12_000));
     }
 
 
