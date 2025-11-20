@@ -6,6 +6,7 @@ import com.commerce.hhplus_e_commerce.repository.jpa.UserJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -22,5 +23,10 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public Optional<User> findByUserId(Long userId) {
         return userJpaRepository.findById(userId);
+    }
+
+    @Override
+    public List<User> findAll() {
+        return userJpaRepository.findAll();
     }
 }

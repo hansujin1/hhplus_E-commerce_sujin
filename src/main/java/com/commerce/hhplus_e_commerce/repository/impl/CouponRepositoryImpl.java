@@ -48,4 +48,9 @@ public class CouponRepositoryImpl implements CouponRepository {
                 .map(Coupon::canIssue)
                 .orElse(false);
     }
+
+    @Override
+    public Optional<Coupon> findByCouponIdWithLock(Long couponId) {
+        return couponJpaRepository.findByCouponIdWithLock(couponId);
+    }
 }

@@ -5,18 +5,16 @@ import com.commerce.hhplus_e_commerce.domain.UserCoupon;
 import com.commerce.hhplus_e_commerce.domain.enums.UserCouponStatus;
 import com.commerce.hhplus_e_commerce.repository.CouponRepository;
 import com.commerce.hhplus_e_commerce.repository.UserCouponRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.concurrent.locks.ReentrantLock;
 
 
 @Service
 @RequiredArgsConstructor
 public class CouponService {
-
-    private final ReentrantLock issueLock = new ReentrantLock(true);
 
     private final UserCouponRepository userCouponRepository;
     private final CouponRepository couponRepository;
@@ -66,15 +64,12 @@ public class CouponService {
         }
     }
 
+    @Transactional
     public UserCoupon issueCoupon(Long userId, Long couponId) {
 
-        issueLock.lock();
-        try {
-
-            Coupon coupon = couponRepository.findByCouponId(couponId)
+            Coupon coupon = couponRepository.findByCouponIdWithLock(couponId)
                     .orElseThrow(() -> new IllegalStateException("쿠폰을 찾을 수 없습니다."));
 
-            // 중복 발급 방지
             if (userCouponRepository.findUserCoupon(userId, couponId).isPresent()) {
                 throw new IllegalStateException("이미 발급받은 쿠폰입니다.");
             }
@@ -92,9 +87,5 @@ public class CouponService {
             );
 
             return userCouponRepository.save(userCoupon);
-
-        } finally {
-            issueLock.unlock();
-        }
     }
 }

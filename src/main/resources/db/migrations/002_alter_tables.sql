@@ -1,0 +1,4 @@
+ALTER TABLE ecommerce.users ADD COLUMN version BIGINT DEFAULT 0 NOT NULL ;
+
+ALTER table test_ecommerce.USERS ADD COLUMN version BIGINT DEFAULT 0 NOT NULL ;
+

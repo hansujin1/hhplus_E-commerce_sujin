@@ -17,4 +17,6 @@ public interface CouponRepository {
     void issueCoupon(Long couponId);
 
     boolean isAvailable(Long couponId);
+
+    Optional<Coupon> findByCouponIdWithLock(Long couponId);
 }

@@ -73,14 +73,12 @@ public class ECommerceIntegrationTest {
     @Test
     @DisplayName("통합 테스트: 쿠폰 발급 -> 주문 생성 -> 결제 완료")
     void fullECommerceFlow() {
-        // Given: 쿠폰 발급
         CouponIssueRequest couponIssueRequest = new CouponIssueRequest(user.getUserId());
         CouponIssueResponse couponIssueResponse = couponIssueUseCase.issue(coupon.getCouponId(), couponIssueRequest);
 
         assertThat(couponIssueResponse.userCouponId()).isNotNull();
         assertThat(couponIssueResponse.couponId()).isEqualTo(coupon.getCouponId());
 
-        // When: 주문 생성
         List<OrderCreateRequest.Item> items = List.of(
                 new OrderCreateRequest.Item(product1.getProductId(), 2) // 화양연화 2개
         );
@@ -93,33 +91,26 @@ public class ECommerceIntegrationTest {
 
         OrderCreateResponse orderResponse = createOrderUseCase.createOrder(orderRequest);
 
-        // Then: 주문 확인
         assertThat(orderResponse.orderId()).isNotNull();
-        assertThat(orderResponse.subtotalAmount()).isEqualTo(50_000); // 25000 * 2
+        assertThat(orderResponse.subtotalAmount()).isEqualTo(50_000);
         assertThat(orderResponse.totalAmount()).isEqualTo(42_500);
         assertThat(orderResponse.status()).isEqualTo(OrderItemStatus.PENDING);
         assertThat(orderResponse.items()).hasSize(1);
 
-        // 재고 감소 확인
         Product updatedProduct1 = productRepository.selectByProductId(product1.getProductId());
-        assertThat(updatedProduct1.getStock()).isEqualTo(98); // 100 - 2
+        assertThat(updatedProduct1.getStock()).isEqualTo(98);
 
-        // When: 결제 진행
         PaymentRequest paymentRequest = new PaymentRequest(user.getUserId(),couponIssueResponse.userCouponId());
         PaymentResponse paymentResponse = paymentUseCase.payOrder(orderResponse.orderId(), paymentRequest);
 
-        // Then: 결제 확인
         assertThat(paymentResponse.orderId()).isEqualTo(orderResponse.orderId());
         assertThat(paymentResponse.paidAmount()).isEqualTo(42_500);
 
-        // 포인트 차감 확인
         User updatedUser = userRepository.findByUserId(user.getUserId()).orElseThrow();
-        assertThat(updatedUser.getPoint()).isEqualTo(57_500); // 100000 - 42500
+        assertThat(updatedUser.getPoint()).isEqualTo(57_500);
 
-        // 주문 상태 확인
         Order order = orderRepository.findByOrderId(orderResponse.orderId()).orElseThrow();
 
-        // 쿠폰 사용 확인
         UserCoupon userCoupon = userCouponRepository.findUserCoupon(couponIssueResponse.userCouponId(),user.getUserId()).orElseThrow();
         assertThat(userCoupon.getStatus()).isEqualTo(UserCouponStatus.USED);
     }
@@ -128,7 +119,6 @@ public class ECommerceIntegrationTest {
     @Test
     @DisplayName("통합 테스트: 품절 상품 주문 실패")
     void orderFailDueToSoldOut() {
-        // Given: 품절 상품 주문 시도
         List<OrderCreateRequest.Item> items = List.of(
                 new OrderCreateRequest.Item(product2.getProductId(), 1) // 뱃지 (품절)
         );
@@ -148,9 +138,8 @@ public class ECommerceIntegrationTest {
     @Test
     @DisplayName("통합 테스트: 재고 부족으로 주문 실패")
     void orderFailDueToInsufficientStock() {
-        // Given: 재고보다 많은 수량 주문
         List<OrderCreateRequest.Item> items = List.of(
-                new OrderCreateRequest.Item(product1.getProductId(), 200) // 재고는 100개
+                new OrderCreateRequest.Item(product1.getProductId(), 200)
         );
 
         OrderCreateRequest orderRequest = new OrderCreateRequest(
@@ -169,7 +158,6 @@ public class ECommerceIntegrationTest {
     @Test
     @DisplayName("통합 테스트: 만료된 쿠폰 사용 시도")
     void expiredCouponUsage() {
-        // Given: 만료된 쿠폰 생성
         LocalDate expiredStart = LocalDate.of(2024, Month.JANUARY, 1);
         LocalDate expiredEnd = LocalDate.of(2024, Month.DECEMBER, 31);
 
@@ -180,7 +168,6 @@ public class ECommerceIntegrationTest {
         UserCoupon userCoupon = new UserCoupon(user.getUserId(), coupon.getCouponId(), UserCouponStatus.EXPIRED, LocalDate.now().plusDays(30));
         userCouponRepository.save(userCoupon);
 
-        // When: 만료된 쿠폰으로 주문 시도
         List<OrderCreateRequest.Item> items = List.of(
                 new OrderCreateRequest.Item(product1.getProductId(), 1)
         );
@@ -191,7 +178,6 @@ public class ECommerceIntegrationTest {
                 expiredCoupon.getCouponId()
         );
 
-        // Then: 예외 발생
         assertThatThrownBy(() -> createOrderUseCase.createOrder(orderRequest))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("만료");
@@ -200,13 +186,11 @@ public class ECommerceIntegrationTest {
     @Test
     @DisplayName("통합 테스트: 쿠폰 중복 발급 방지")
     void preventDuplicateCouponIssue() {
-        // Given: 첫 번째 쿠폰 발급
         CouponIssueRequest couponRequest = new CouponIssueRequest(user.getUserId());
         CouponIssueResponse firstResponse = couponIssueUseCase.issue(coupon.getCouponId(), couponRequest);
 
         assertThat(firstResponse.userCouponId()).isNotNull();
 
-        // When & Then: 동일한 쿠폰 재발급 시도
         assertThatThrownBy(() -> couponIssueUseCase.issue(coupon.getCouponId(), couponRequest))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("이미 발급");
@@ -215,7 +199,6 @@ public class ECommerceIntegrationTest {
     @Test
     @DisplayName("통합 테스트: 사용한 쿠폰 재사용 방지")
     void preventUsedCouponReuse() {
-        // Given: 쿠폰 발급 및 첫 번째 주문/결제
         CouponIssueRequest couponRequest = new CouponIssueRequest(user.getUserId());
         CouponIssueResponse couponResponse = couponIssueUseCase.issue(coupon.getCouponId(), couponRequest);
 
@@ -232,7 +215,6 @@ public class ECommerceIntegrationTest {
         PaymentRequest paymentRequest1 = new PaymentRequest(user.getUserId(),couponResponse.couponId());
         paymentUseCase.payOrder(orderResponse1.orderId(), paymentRequest1);
 
-        // When & Then: 사용된 쿠폰으로 재주문 시도
         List<OrderCreateRequest.Item> items2 = List.of(
                 new OrderCreateRequest.Item(product1.getProductId(), 1)
         );
