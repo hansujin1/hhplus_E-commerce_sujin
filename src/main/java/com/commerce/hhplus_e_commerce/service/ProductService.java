@@ -4,12 +4,12 @@ import com.commerce.hhplus_e_commerce.domain.OrderItems;
 import com.commerce.hhplus_e_commerce.domain.Product;
 import com.commerce.hhplus_e_commerce.dto.OrderCreateRequest;
 import com.commerce.hhplus_e_commerce.repository.ProductRepository;
+import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -64,7 +64,8 @@ public class ProductService {
     }
 
 
-    public void minusStock(List<Product> products, @NotEmpty List<OrderCreateRequest.Item> items) {
+    @Transactional
+    public void minusStock( @NotEmpty List<OrderCreateRequest.Item> items) {
         if (items == null || items.isEmpty()) {
             throw new IllegalArgumentException("차감할 상품이 없습니다.");
         }
@@ -77,27 +78,22 @@ public class ProductService {
             qtyByProduct.merge(it.productId(), it.quantity(), Integer::sum);
         }
 
-        Map<Long, Product> productMap = products.stream()
-                .collect(Collectors.toMap(Product::getProductId, p -> p));
+        for(Map.Entry<Long, Integer> entry : qtyByProduct.entrySet()) {
+            Long productId = entry.getKey();
+            Integer quantity = entry.getValue();
 
-        for (Map.Entry<Long, Integer> e : qtyByProduct.entrySet()) {
-            Long productId = e.getKey();
-            int need = e.getValue();
+            Product product = productRepository.findByProductIdWithLock(productId)
+                    .orElseThrow(() -> new IllegalStateException("상품을 찾을 수 없습니다: " + productId));
 
-            Product p = productMap.get(productId);
-            if (p == null) {
-                // 방어: 전달된 products에 없으면 저장소에서 조회 (in-memory/DB 모두 대응)
-                p = productRepository.selectByProductId(productId);
-                if (p == null) {
-                    throw new IllegalStateException("상품을 찾을 수 없습니다: " + productId);
-                }
-                productMap.put(productId, p);
+            if (product.getStock() < quantity) {
+                throw new IllegalStateException(
+                        "재고 부족: " + product.getProductName() + " (요청: " + quantity + ", 보유: " + product.getStock() + ")"
+                );
             }
 
-            p.decreaseStock(need);
+            product.decreaseStock(quantity);
 
-            // DB 전환 시엔 UPDATE 의
-            productRepository.save(p);
+            productRepository.save(product);
         }
     }
 

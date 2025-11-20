@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -33,5 +34,10 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Override
     public List<Product> findTopProductsByPopularity() {
         return productJpaRepository.findTop10ByOrderByPopularityScoreDesc();
+    }
+
+    @Override
+    public Optional<Product> findByProductIdWithLock(Long productId) {
+        return productJpaRepository.findByProductIdWithLock(productId);
     }
 }
