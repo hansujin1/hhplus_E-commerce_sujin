@@ -127,3 +127,35 @@ CouponService에서 ReentrantLock을 이용해서 Lock을 잡음
 매번 Lock을 잡아 처리하는 방식보다는 버전을 확인하여 충돌 시 재시도하는 낙관적 락 쪽이 더 적합하다고 생각함
 
 [해결]
+-- 기존에는 Lock을 잡는 부분이 미존재함
+
+-- 수정 후
+[User.java]
+    @Version
+    private  Long version;
+
+[TABLE 수정]
+ALTER TABLE ecommerce.users ADD COLUMN version BIGINT DEFAULT 0 NOT NULL ;
+
+[OrderController.java - pay]
+        int maxRetries = 3; // 3번 정도 시도
+        int retryCount = 0;
+
+        while (maxRetries > retryCount) {
+            try {
+                return ResponseEntity.ok(paymentUseCase.payOrder(orderId, req));
+            } catch (OptimisticLockingFailureException ex) {
+                retryCount++;
+                if (maxRetries <= retryCount) {
+                    throw new IllegalStateException("결제 중 오류가 발생했습니다.재시도를 해주세요");
+                }
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                    throw new IllegalStateException("결제 처리가 중단되었습니다.");
+                }
+            }
+        }
+        throw new IllegalStateException("결제 처리 실패");
+    }
