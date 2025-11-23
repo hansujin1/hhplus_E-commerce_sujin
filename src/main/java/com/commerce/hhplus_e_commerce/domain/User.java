@@ -23,6 +23,9 @@ public class User {
     @Column(name = "created_dt", nullable = false)
     private  LocalDate createdDt;
 
+    @Version
+    private  Long version;
+
     public User(String username, int point) {
         this.userName = username;
         this.point = point;

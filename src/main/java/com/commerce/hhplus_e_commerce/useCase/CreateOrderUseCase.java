@@ -37,7 +37,7 @@ public class CreateOrderUseCase {
             discountPrice = couponService.getDiscountAmount(req.couponId(), totalPrice);
         }
 
-        productService.minusStock(products, req.items());
+        productService.minusStock(req.items());
 
         Order order = orderService.createOrder(
                 req.userId(),
