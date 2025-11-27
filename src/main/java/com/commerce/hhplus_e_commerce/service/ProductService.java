@@ -7,9 +7,11 @@ import com.commerce.hhplus_e_commerce.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -116,5 +118,18 @@ public class ProductService {
             product.restoreStock(qty);
             productRepository.save(product);
         }
+    }
+
+    /**
+     * 인기 상품 조회 (캐시 적용)
+     * - 인기도 점수 기준 상위 상품 조회
+     * - 캐시 TTL: 10분
+     */
+    @Cacheable(value = "popularProducts", key = "'top' + #limit")
+    public List<Product> getPopularProducts(int limit) {
+        // 기존 메서드 사용 후 limit 적용
+        return productRepository.findTopProductsByPopularity().stream()
+                .limit(limit)
+                .collect(Collectors.toList());
     }
 }
