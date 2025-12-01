@@ -16,4 +16,6 @@ public interface OrderRepository {
 
     Optional<Order> findByUserAndOrderId(Long userId, Long orderId);
 
+    long count();
+
 }

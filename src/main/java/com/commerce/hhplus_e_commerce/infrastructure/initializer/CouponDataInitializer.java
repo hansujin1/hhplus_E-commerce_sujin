@@ -24,21 +24,26 @@ public class CouponDataInitializer {
 
     @PostConstruct
     public void init(){
+        if (couponRepository.findAllCoupon().size() > 0) {
+            log.info("Coupon 데이터가 이미 존재합니다. 초기화를 건너뜁니다.");
+            return;
+        }
+
         log.info("coupon 정보 초기 셋팅하기");
 
         LocalDate startDate1 = LocalDate.of(2025, Month.JANUARY, 1);
         LocalDate endDate1   = LocalDate.of(2025, Month.DECEMBER, 31);
 
         couponRepository.save(new Coupon("첫구매 15% 할인 쿠폰", 0.15, DiscountType.FIXED,
-                1000,100,startDate1,endDate1,30, CouponStatus.ISSUING
+                1000, 100, startDate1, endDate1, 30, CouponStatus.ISSUING
         ));
 
 
         LocalDate startDate2 = LocalDate.of(2025, Month.FEBRUARY, 1);
         LocalDate endDate2   = LocalDate.of(2025, Month.JUNE, 30);
 
-        couponRepository.save(new Coupon("겨울대비 20,000원 할인 쿠폰",20000.0,
-                DiscountType.RATE,500,50,startDate2,endDate2,15, CouponStatus.ISSUING
+        couponRepository.save(new Coupon("겨울대비 20,000원 할인 쿠폰", 20000.0,
+                DiscountType.RATE, 500, 50, startDate2, endDate2, 15, CouponStatus.ISSUING
         ));
     }
 

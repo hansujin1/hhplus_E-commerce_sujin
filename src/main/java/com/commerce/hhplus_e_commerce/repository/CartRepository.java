@@ -12,4 +12,6 @@ public interface CartRepository {
 
     void deleteCartItems(Long userId, Long productId);
 
+    long count();
+
 }
