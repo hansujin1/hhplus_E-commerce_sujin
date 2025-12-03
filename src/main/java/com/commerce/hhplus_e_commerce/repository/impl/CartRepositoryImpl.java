@@ -27,4 +27,9 @@ public class CartRepositoryImpl implements CartRepository {
     public void deleteCartItems(Long userId, Long productId) {
         cartJpaRepository.deleteByUserIdAndProductId(userId,productId);
     }
+
+    @Override
+    public long count() {
+        return cartJpaRepository.count();
+    }
 }

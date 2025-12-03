@@ -1,14 +1,15 @@
 package com.commerce.hhplus_e_commerce.tdd;
 
 import com.commerce.hhplus_e_commerce.domain.Coupon;
+import com.commerce.hhplus_e_commerce.domain.User;
 import com.commerce.hhplus_e_commerce.facade.CouponFacade;
 import com.commerce.hhplus_e_commerce.repository.CouponRepository;
+import com.commerce.hhplus_e_commerce.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -19,7 +20,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@Transactional
 class ConcurrencyCouponTest {
 
     @Autowired
@@ -28,13 +28,28 @@ class ConcurrencyCouponTest {
     @Autowired
     private CouponRepository couponRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     private Long testCouponId;
+    private static final int THREAD_COUNT = 400;
 
     @BeforeEach
     void setUp() {
+        // 쿠폰 조회
         List<Coupon> coupons = couponRepository.findAllCoupon();
         if (!coupons.isEmpty()) {
             testCouponId = coupons.get(0).getCouponId();
+        }
+
+        // 테스트용 사용자 생성 (400명)
+        long existingUserCount = userRepository.count();
+        for (int i = 0; i < THREAD_COUNT; i++) {
+            long userId = existingUserCount + i + 1;
+            // userId가 이미 존재하는지 확인
+            if (userRepository.findByUserId(userId).isEmpty()) {
+                userRepository.save(new User("테스트유저" + userId, 100_000));
+            }
         }
     }
 
@@ -49,17 +64,19 @@ class ConcurrencyCouponTest {
         int issuedBefore = couponBefore.getIssuedQuantity();
         int availableQuantity = totalQuantity - issuedBefore;
 
-        int threadCount = 400;
-
-        ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
-        CountDownLatch latch = new CountDownLatch(threadCount);
+        ExecutorService executorService = Executors.newFixedThreadPool(THREAD_COUNT);
+        CountDownLatch latch = new CountDownLatch(THREAD_COUNT);
 
         AtomicInteger successCount = new AtomicInteger(0);
         AtomicInteger failCount = new AtomicInteger(0);
 
+        // 시작 userId 계산 (기존 User 수 + 1)
+        long existingUserCount = userRepository.count();
+        long startUserId = existingUserCount - THREAD_COUNT + 1;
+
         // When: 400명이 동시에 쿠폰 발급 요청
-        for (int i = 0; i < threadCount; i++) {
-            long userId = i + 1L;
+        for (int i = 0; i < THREAD_COUNT; i++) {
+            long userId = startUserId + i;  // 각자 고유한 userId 사용
 
             executorService.submit(() -> {
                 try {
@@ -93,7 +110,7 @@ class ConcurrencyCouponTest {
         assertThat(couponAfter.getIssuedQuantity()).isGreaterThanOrEqualTo(issuedBefore);
         assertThat(couponAfter.getIssuedQuantity()).isLessThanOrEqualTo(totalQuantity);
         assertThat(successCount.get()).isGreaterThan(0);
-        assertThat(successCount.get() + failCount.get()).isEqualTo(threadCount);
+        assertThat(successCount.get() + failCount.get()).isEqualTo(THREAD_COUNT);
 
         int actualIssued = couponAfter.getIssuedQuantity() - issuedBefore;
         assertThat(successCount.get()).isEqualTo(actualIssued);

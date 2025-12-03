@@ -10,4 +10,6 @@ public interface PointHisRepository {
 
     List<PointHis> findPointHisByUserId(Long userId);
 
+    long count();
+
 }

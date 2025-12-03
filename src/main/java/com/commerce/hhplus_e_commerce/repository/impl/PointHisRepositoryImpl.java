@@ -23,4 +23,9 @@ public class PointHisRepositoryImpl implements PointHisRepository {
         return pointHisJpaRepository.findByUserIdOrderByCreatedDtDesc(userId);
     }
 
+    @Override
+    public long count() {
+        return pointHisJpaRepository.count();
+    }
+
 }

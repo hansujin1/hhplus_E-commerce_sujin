@@ -29,4 +29,14 @@ public class OrderItemsRepositoryImpl implements OrderItemsRepository {
     public Optional<OrderItems> findByOrderItemIdAndOrderID(Long orderItemId,Long orderId) {
         return orderItemsJpaRepository.findByOrderItemIdAndOrderId(orderItemId,orderId);
     }
+
+    @Override
+    public List<OrderItems> findAll() {
+        return orderItemsJpaRepository.findAll();
+    }
+
+    @Override
+    public long count() {
+        return orderItemsJpaRepository.count();
+    }
 }

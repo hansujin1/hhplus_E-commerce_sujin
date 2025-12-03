@@ -29,4 +29,9 @@ public class UserRepositoryImpl implements UserRepository {
     public List<User> findAll() {
         return userJpaRepository.findAll();
     }
+
+    @Override
+    public long count() {
+        return userJpaRepository.count();
+    }
 }

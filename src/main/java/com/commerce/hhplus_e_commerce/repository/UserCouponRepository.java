@@ -16,4 +16,6 @@ public interface UserCouponRepository {
 
     void useCoupon(Long couponId, Long userId);
 
+    long count();
+
 }

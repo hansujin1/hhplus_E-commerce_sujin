@@ -6,7 +6,6 @@ import com.commerce.hhplus_e_commerce.useCase.PaymentUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,25 +34,6 @@ public class OrderController {
     @Operation(summary = "결제 처리(포인트 + 쿠폰)", description = "쿠폰 유효성 확인 → 할인 → 포인트 차감 → 주문 PAID")
     @PostMapping(value = "/{orderId}/payment", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PaymentResponse> pay(@PathVariable Long orderId, @Valid @RequestBody PaymentRequest req) {
-        int maxRetries = 3;
-        int retryCount = 0;
-
-        while (maxRetries > retryCount) {
-            try {
-                return ResponseEntity.ok(paymentUseCase.payOrder(orderId, req));
-            } catch (OptimisticLockingFailureException ex) {
-                retryCount++;
-                if (maxRetries <= retryCount) {
-                    throw new IllegalStateException("결제 중 오류가 발생했습니다.재시도를 해주세요");
-                }
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException ie) {
-                    Thread.currentThread().interrupt();
-                    throw new IllegalStateException("결제 처리가 중단되었습니다.");
-                }
-            }
-        }
-        throw new IllegalStateException("결제 처리 실패");
+        return ResponseEntity.ok(paymentUseCase.payOrder(orderId, req));
     }
 }

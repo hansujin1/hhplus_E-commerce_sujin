@@ -47,8 +47,8 @@ class CouponServiceTest {
         Long couponId = 100L;
 
         Coupon coupon = mock(Coupon.class);
-        when(couponRepository.findByCouponId(couponId)).thenReturn(Optional.of(coupon));
-        when(userCouponRepository.findUserCoupon(userId, couponId)).thenReturn(Optional.empty());
+        when(couponRepository.findByCouponIdWithLock(couponId)).thenReturn(Optional.of(coupon));
+        when(userCouponRepository.findUserCoupon(couponId, userId)).thenReturn(Optional.empty());
         when(userCouponRepository.save(any(UserCoupon.class))).thenAnswer(inv -> inv.getArgument(0));
 
         UserCoupon issued = couponService.issueCoupon(userId, couponId);
@@ -79,7 +79,7 @@ class CouponServiceTest {
                 30,
                 CouponStatus.ISSUING
         );
-        when(couponRepository.findByCouponId(couponId))
+        when(couponRepository.findByCouponIdWithLock(couponId))
                 .thenReturn(Optional.of(coupon));
 
         // 2️⃣ 해당 유저는 이미 이 쿠폰을 발급받았다고 가정
@@ -91,7 +91,7 @@ class CouponServiceTest {
         );
 
         userCoupon.userCouponId(1L);
-        when(userCouponRepository.findUserCoupon(userId, couponId))
+        when(userCouponRepository.findUserCoupon(couponId, userId))
                 .thenReturn(Optional.of(userCoupon));
 
         // 3️⃣ 검증: 이미 발급받은 쿠폰 예외
@@ -108,7 +108,7 @@ class CouponServiceTest {
 
         UserCoupon expiredCoupon = mock(UserCoupon.class);
         when(expiredCoupon.isValid()).thenReturn(false);
-        when(userCouponRepository.findUserCoupon(userId, couponId))
+        when(userCouponRepository.findUserCoupon(couponId, userId))
                 .thenReturn(Optional.of(expiredCoupon));
 
         assertThatThrownBy(() -> couponService.validateCoupon(userId, couponId))
@@ -123,7 +123,7 @@ class CouponServiceTest {
         Long couponId = 100L;
 
         UserCoupon userCoupon = mock(UserCoupon.class);
-        when(userCouponRepository.findUserCoupon(userId, couponId)).thenReturn(Optional.of(userCoupon));
+        when(userCouponRepository.findUserCoupon(couponId, userId)).thenReturn(Optional.of(userCoupon));
 
         couponService.consumeOnPayment(userId, couponId);
 
@@ -139,7 +139,7 @@ class CouponServiceTest {
 
         UserCoupon usedCoupon = mock(UserCoupon.class);
         when(usedCoupon.getStatus()).thenReturn(UserCouponStatus.USED);
-        when(userCouponRepository.findUserCoupon(userId, couponId))
+        when(userCouponRepository.findUserCoupon(couponId, userId))
                 .thenReturn(Optional.of(usedCoupon));
 
         couponService.restoreCouponStatus(userId, couponId);
