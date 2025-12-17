@@ -30,9 +30,14 @@ public class PaymentService {
      */
     @Transactional
     public Order processPayment(Long orderId, Long userId) {
+        System.out.println("===== processPayment 시작 =====");
+        System.out.println("orderId: " + orderId + ", userId: " + userId);
+        
         // 주문 조회
         Order order = orderRepository.findByOrderId(orderId)
                 .orElseThrow(() -> new IllegalStateException("주문을 찾을 수 없습니다."));
+
+        System.out.println("주문 조회 완료 - userCouponId: " + order.getUserCouponId());
 
         if (!order.getUserId().equals(userId)) {
             throw new IllegalStateException("본인의 주문만 결제할 수 있습니다.");
@@ -45,16 +50,26 @@ public class PaymentService {
         User user = userRepository.findByUserId(userId)
                 .orElseThrow(() -> new IllegalStateException("사용자를 찾을 수 없습니다."));
 
+        System.out.println("유저 조회 완료 - 현재 포인트: " + user.getPoint() + ", version: " + user.getVersion());
+
         int amount = order.getFinalPrice();
         user.payPoint(amount);
         userRepository.save(user);
 
+        System.out.println("포인트 차감 완료 - 남은 포인트: " + user.getPoint());
+
         if (order.getUserCouponId() != null) {
+            System.out.println("쿠폰 사용 처리 시작");
             couponFacade.consumeOnPayment(userId, order.getUserCouponId());
+        } else {
+            System.out.println("쿠폰 없음 - 쿠폰 처리 스킵");
         }
 
         order.completePayment();
-        return orderRepository.save(order);
+        Order saved = orderRepository.save(order);
+        
+        System.out.println("===== processPayment 완료 =====");
+        return saved;
     }
 
     /**

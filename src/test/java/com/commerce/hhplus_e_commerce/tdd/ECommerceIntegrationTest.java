@@ -15,6 +15,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -227,5 +231,82 @@ public class ECommerceIntegrationTest {
         assertThatThrownBy(() -> createOrderUseCase.createOrder(orderRequest2))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("이미 사용");
+    }
+
+    @Test
+    @Transactional(Transactional.TxType.NOT_SUPPORTED)  // 이 테스트는 트랜잭션 비활성화
+    @DisplayName("@Retryable 테스트: 낙관적 락 충돌 시 자동 재시도")
+    void testRetryableOnOptimisticLock() throws InterruptedException {
+        // Given: 새 유저 생성 (깨끗한 상태)
+        User testUser = new User("테스트유저", 100_000);
+        userRepository.save(testUser);
+
+        // 새 상품 생성
+        Product testProduct = new Product("테스트상품", 100, 25_000, ProductStatus.SALE, 100);
+        productRepository.save(testProduct);
+
+        // 4개 주문 생성
+        int orderCount = 4;
+        Long[] orderIds = new Long[orderCount];
+
+        for (int i = 0; i < orderCount; i++) {
+            Order order = new Order(
+                testUser.getUserId(),
+                25_000,  // totalPrice
+                0,       // discountPrice
+                25_000,  // finalPrice
+                0,       // cancelledPrice
+                null,    // paidDt
+                null     // userCouponId - 명확하게 null!
+            );
+            Order savedOrder = orderRepository.save(order);
+            orderIds[i] = savedOrder.getOrderId();
+
+            System.out.println("생성 주문 ID: " + savedOrder.getOrderId() +
+                             ", userCouponId: " + savedOrder.getUserCouponId());
+        }
+
+        // When: 동시 결제
+        ExecutorService executorService = Executors.newFixedThreadPool(orderCount);
+        CountDownLatch latch = new CountDownLatch(orderCount);
+        AtomicInteger successCount = new AtomicInteger(0);
+        AtomicInteger failCount = new AtomicInteger(0);
+
+        for (int i = 0; i < orderCount; i++) {
+            final Long orderId = orderIds[i];
+            executorService.submit(() -> {
+                try {
+                    PaymentRequest paymentRequest = new PaymentRequest(testUser.getUserId(), null);
+                    PaymentResponse response = paymentUseCase.payOrder(orderId, paymentRequest);
+
+                    if (response.status() == OrderItemStatus.PAID) {
+                        successCount.incrementAndGet();
+                    } else {
+                        failCount.incrementAndGet();
+                    }
+                } catch (Exception e) {
+                     failCount.incrementAndGet();
+                     System.out.println("결제 실패: " + e.getClass().getName() + " - " + e.getMessage());
+                     e.printStackTrace();
+                } finally {
+                    latch.countDown();
+                }
+            });
+        }
+
+        latch.await();
+        executorService.shutdown();
+
+        // Then
+        User userAfter = userRepository.findByUserId(testUser.getUserId()).orElseThrow();
+
+        System.out.println("===== @Retryable 테스트 결과 =====");
+        System.out.println("결제 성공: " + successCount.get());
+        System.out.println("결제 실패: " + failCount.get());
+        System.out.println("최종 포인트: " + userAfter.getPoint());
+        System.out.println("==================================");
+
+        assertThat(successCount.get()).isGreaterThan(0);
+        assertThat(successCount.get() + failCount.get()).isEqualTo(orderCount);
     }
 }
