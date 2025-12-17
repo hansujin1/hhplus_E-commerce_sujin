@@ -28,7 +28,7 @@ public class CouponService {
             throw new IllegalArgumentException("유저ID가 없습니다.");
         }
 
-        UserCoupon userCoupon = userCouponRepository.findUserCoupon(userId, couponId)
+        UserCoupon userCoupon = userCouponRepository.findUserCoupon(couponId, userId)
                 .orElseThrow(() -> new IllegalStateException("쿠폰을 찾을 수 없습니다: " + couponId));
 
         if (!userCoupon.isValid()) {
@@ -45,18 +45,30 @@ public class CouponService {
     }
 
     //쿠폰 사용완료
-    public void consumeOnPayment(Long userId, Long couponId) {
-        UserCoupon userCoupon = userCouponRepository.findUserCoupon(userId, couponId)
-                .orElseThrow(() -> new IllegalStateException("쿠폰을 찾을 수 없습니다: " + couponId));
+    public void consumeOnPayment(Long userId, Long userCouponId) {
+        if (userCouponId == null) {
+            return;  // 쿠폰 없으면 그냥 리턴
+        }
+        
+        UserCoupon userCoupon = userCouponRepository.findById(userCouponId)
+                .orElseThrow(() -> new IllegalStateException("사용자 쿠폰을 찾을 수 없습니다: " + userCouponId));
+        
+        if (!userCoupon.getUserId().equals(userId)) {
+            throw new IllegalStateException("본인의 쿠폰만 사용할 수 있습니다.");
+        }
 
         userCoupon.use();
         userCouponRepository.save(userCoupon);
     }
 
     //결제 실패로 원복
-    public void restoreCouponStatus(Long userId, Long couponId) {
-        UserCoupon userCoupon = userCouponRepository.findUserCoupon(userId, couponId)
-                .orElseThrow(() -> new IllegalStateException("쿠폰을 찾을 수 없습니다: " + couponId));
+    public void restoreCouponStatus(Long userId, Long userCouponId) {
+        if (userCouponId == null) {
+            return;  // 쿠폰 없으면 그냥 리턴
+        }
+        
+        UserCoupon userCoupon = userCouponRepository.findById(userCouponId)
+                .orElseThrow(() -> new IllegalStateException("사용자 쿠폰을 찾을 수 없습니다: " + userCouponId));
 
         if(userCoupon.getStatus().equals(UserCouponStatus.USED)){
             userCoupon.activate();
@@ -70,7 +82,7 @@ public class CouponService {
             Coupon coupon = couponRepository.findByCouponIdWithLock(couponId)
                     .orElseThrow(() -> new IllegalStateException("쿠폰을 찾을 수 없습니다."));
 
-            if (userCouponRepository.findUserCoupon(userId, couponId).isPresent()) {
+            if (userCouponRepository.findUserCoupon(couponId, userId).isPresent()) {
                 throw new IllegalStateException("이미 발급받은 쿠폰입니다.");
             }
 

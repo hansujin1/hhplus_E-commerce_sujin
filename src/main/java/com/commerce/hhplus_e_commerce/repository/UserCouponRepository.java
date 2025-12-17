@@ -13,7 +13,11 @@ public interface UserCouponRepository {
     List<UserCoupon> findAllCoupon(Long userId);
 
     Optional<UserCoupon> findUserCoupon(Long couponId, Long userId);
+    
+    Optional<UserCoupon> findById(Long userCouponId);
 
     void useCoupon(Long couponId, Long userId);
+
+    long count();
 
 }
