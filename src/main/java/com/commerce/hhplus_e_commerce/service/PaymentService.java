@@ -3,15 +3,20 @@ package com.commerce.hhplus_e_commerce.service;
 import com.commerce.hhplus_e_commerce.domain.Order;
 import com.commerce.hhplus_e_commerce.domain.OrderItems;
 import com.commerce.hhplus_e_commerce.domain.User;
+import com.commerce.hhplus_e_commerce.event.OrderCompletedEvent;
 import com.commerce.hhplus_e_commerce.facade.CouponFacade;
 import com.commerce.hhplus_e_commerce.facade.ProductFacade;
+import com.commerce.hhplus_e_commerce.infrastructure.kafka.KafkaProducerService;
 import com.commerce.hhplus_e_commerce.repository.OrderItemsRepository;
 import com.commerce.hhplus_e_commerce.repository.OrderRepository;
 import com.commerce.hhplus_e_commerce.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -23,6 +28,7 @@ public class PaymentService {
     private final UserRepository userRepository;
     private final ProductFacade productFacade;
     private final CouponFacade couponFacade;
+    private final KafkaProducerService kafkaProducerService;
 
     /**
      * 결제 처리
@@ -68,8 +74,34 @@ public class PaymentService {
         order.completePayment();
         Order saved = orderRepository.save(order);
         
+        // 트랜잭션 커밋 후 Kafka 이벤트 발행
+        registerAfterCommitEvent(saved);
+        
         System.out.println("===== processPayment 완료 =====");
         return saved;
+    }
+
+    /**
+     * 트랜잭션 커밋 후 주문 완료 이벤트 발행
+     */
+    private void registerAfterCommitEvent(Order order) {
+        TransactionSynchronizationManager.registerSynchronization(
+            new TransactionSynchronization() {
+                @Override
+                public void afterCommit() {
+                    OrderCompletedEvent event = OrderCompletedEvent.builder()
+                            .orderId(order.getOrderId())
+                            .userId(order.getUserId())
+                            .totalAmount(order.getFinalPrice())
+                            .orderDate(LocalDateTime.now())
+                            .orderStatus(order.getPaidDt() != null ? "COMPLETED" : "PENDING")
+                            .build();
+                    
+                    kafkaProducerService.publishOrderCompletedEvent(event);
+                    System.out.println("주문 완료 이벤트 발행 완료: orderId=" + order.getOrderId());
+                }
+            }
+        );
     }
 
     /**

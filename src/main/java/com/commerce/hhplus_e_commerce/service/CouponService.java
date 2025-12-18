@@ -3,6 +3,8 @@ package com.commerce.hhplus_e_commerce.service;
 import com.commerce.hhplus_e_commerce.domain.Coupon;
 import com.commerce.hhplus_e_commerce.domain.UserCoupon;
 import com.commerce.hhplus_e_commerce.domain.enums.UserCouponStatus;
+import com.commerce.hhplus_e_commerce.event.CouponIssueRequestEvent;
+import com.commerce.hhplus_e_commerce.infrastructure.kafka.KafkaProducerService;
 import com.commerce.hhplus_e_commerce.repository.CouponRepository;
 import com.commerce.hhplus_e_commerce.repository.UserCouponRepository;
 import jakarta.transaction.Transactional;
@@ -10,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 
 @Service
@@ -18,6 +21,7 @@ public class CouponService {
 
     private final UserCouponRepository userCouponRepository;
     private final CouponRepository couponRepository;
+    private final KafkaProducerService kafkaProducerService;
 
     public void validateCoupon(Long userId,Long couponId) {
         if(couponId == null){
@@ -99,5 +103,54 @@ public class CouponService {
             );
 
             return userCouponRepository.save(userCoupon);
+    }
+
+    /**
+     * Kafka를 통한 비동기 쿠폰 발급 요청
+     */
+    public String issueCouponAsync(Long userId, Long couponId) {
+        Coupon coupon = couponRepository.findByCouponId(couponId)
+                .orElseThrow(() -> new IllegalStateException("쿠폰을 찾을 수 없습니다."));
+
+        if (userCouponRepository.findUserCoupon(couponId, userId).isPresent()) {
+            throw new IllegalStateException("이미 발급받은 쿠폰입니다.");
+        }
+
+        String requestId = UUID.randomUUID().toString();
+
+        CouponIssueRequestEvent event = CouponIssueRequestEvent.builder()
+                .couponId(couponId)
+                .userId(userId)
+                .requestId(requestId)
+                .build();
+
+        kafkaProducerService.publishCouponIssueRequestEvent(event);
+
+        return requestId;
+    }
+
+    /**
+     * Kafka Consumer에서 호출하는 실제 발급 처리
+     */
+    @Transactional
+    public void issueCouponByKafka(Long couponId, Long userId) {
+        Coupon coupon = couponRepository.findByCouponId(couponId)
+                .orElseThrow(() -> new IllegalStateException("쿠폰을 찾을 수 없습니다."));
+
+        if (userCouponRepository.findUserCoupon(couponId, userId).isPresent()) {
+            throw new IllegalStateException("이미 발급받은 쿠폰입니다.");
+        }
+
+        coupon.issue();
+        couponRepository.save(coupon);
+
+        UserCoupon userCoupon = new UserCoupon(
+                couponId,
+                userId,
+                UserCouponStatus.ACTIVE,
+                LocalDate.now().plusDays(coupon.getValidDays())
+        );
+
+        userCouponRepository.save(userCoupon);
     }
 }
